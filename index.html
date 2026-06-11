@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AvèlonStudios · Zentrale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh;overflow:hidden;}
+.dash{display:flex;height:100vh;overflow:hidden;}
+.side{width:230px;flex-shrink:0;background:#080808;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;}
+.side-brand{padding:22px 24px 18px;border-bottom:1px solid #1a1a1a;}
+.side-logo{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:#c9b97a;line-height:1;letter-spacing:.02em;}
+.side-sub{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#666;margin-top:5px;}
+.side-nav{flex:1;padding:12px 0;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;cursor:pointer;border-left:2px solid transparent;transition:all .15s;font-size:14px;color:#999;}
+.nav-item:hover{background:#101010;color:#ddd;}
+.nav-item.active{background:#101010;border-left-color:#c9b97a;color:#f0ede6;}
+.nav-ico{width:16px;height:16px;flex-shrink:0;opacity:.85;}
+.side-foot{padding:16px 24px;border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:10px;}
+.foot-av{width:32px;height:32px;border-radius:50%;background:#c9b97a22;border:1px solid #c9b97a44;display:flex;align-items:center;justify-content:center;font-size:12px;color:#c9b97a;font-weight:500;}
+.foot-name{font-size:12px;color:#ddd;}
+.foot-role{font-size:10px;color:#666;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{padding:18px 30px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.top-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:#f0ede6;}
+.top-git{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 13px;border-radius:20px;transition:all .3s;}
+.top-git.online{color:#6a9a6a;background:#0f1a0f;border:1px solid #1d3a1d;}
+.top-git.offline{color:#9a6a6a;background:#1a0f0f;border:1px solid #3a1d1d;}
+.top-git.sync{color:#9a8a6a;background:#1a160f;border:1px solid #3a301d;}
+.git-dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.top-git.online .git-dot{animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.content{flex:1;overflow-y:auto;padding:26px 30px;}
+.btn{font-family:'Jost',sans-serif;font-size:12px;padding:8px 15px;border-radius:8px;border:1px solid #2a2a2a;background:#141414;color:#ddd;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px;}
+.btn:hover{border-color:#c9b97a55;color:#fff;}
+.btn-gold{background:#c9b97a;color:#1a1a1a;border-color:#c9b97a;font-weight:500;}
+.btn-gold:hover{background:#d4c688;color:#1a1a1a;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:26px;}
+.stat{background:#101010;border:1px solid #1c1c1c;border-radius:10px;padding:17px 18px;}
+.stat-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#777;margin-bottom:10px;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;color:#f0ede6;line-height:1;}
+.stat-num.gold{color:#c9b97a;}
+.stat-trend{font-size:11px;color:#5cba5c;margin-top:7px;}
+.section-h{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#888;margin:24px 0 14px;display:flex;align-items:center;gap:11px;}
+.section-h::after{content:'';flex:1;height:1px;background:#1a1a1a;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.panel{background:#101010;border:1px solid #1c1c1c;border-radius:10px;padding:18px;}
+.panel-h{font-size:13px;color:#ccc;margin-bottom:14px;font-weight:500;display:flex;justify-content:space-between;align-items:center;}
+.panel-h span{font-size:10px;color:#666;}
+.li{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #181818;font-size:13px;}
+.li:last-child{border-bottom:none;}
+.li-name{color:#ccc;}
+.li-meta{font-size:11px;color:#777;}
+.pill{font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:.05em;}
+.pill-gold{background:#c9b97a1a;color:#c9b97a;border:1px solid #c9b97a33;}
+.pill-green{background:#1a3a1a;color:#7ac97a;border:1px solid #2a5a2a;}
+.pill-blue{background:#1a2a3a;color:#7aaad0;border:1px solid #2a4a6a;}
+.pill-grey{background:#1e1e1e;color:#999;border:1px solid #2a2a2a;}
+.pill-red{background:#3a1a1a;color:#c97a7a;border:1px solid #5a2a2a;}
+.board-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.board-desc{font-size:12px;color:#888;line-height:1.6;max-width:60%;}
+.board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.col{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;padding:13px;min-height:420px;transition:background .15s;}
+.col.dragover{background:#13110c;border-color:#c9b97a44;}
+.col-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;}
+.col-count{background:#1a1a1a;color:#888;font-size:9px;padding:2px 7px;border-radius:10px;}
+.card{background:#141414;border:1px solid #222;border-radius:8px;padding:11px;margin-bottom:9px;cursor:grab;transition:all .15s;position:relative;}
+.card:hover{border-color:#c9b97a55;}
+.card.dragging{opacity:.4;}
+.card-name{font-size:12px;color:#e8e8e3;font-weight:500;margin-bottom:3px;padding-right:18px;}
+.card-branch{font-size:10px;color:#888;margin-bottom:8px;}
+.card-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.card-loc{font-size:9px;color:#666;}
+.card-demo{font-size:9px;color:#c9b97a;text-decoration:none;border:1px solid #c9b97a33;padding:2px 7px;border-radius:10px;transition:all .15s;}
+.card-demo:hover{background:#c9b97a1a;}
+.card-del{position:absolute;top:9px;right:9px;width:15px;height:15px;border-radius:4px;background:#1e1e1e;color:#888;border:none;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;}
+.card:hover .card-del{opacity:1;}
+.card-del:hover{background:#3a1a1a;color:#c97a7a;}
+.add-card{width:100%;padding:9px;background:transparent;border:1px dashed #2a2a2a;border-radius:8px;color:#666;font-size:11px;cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;}
+.add-card:hover{border-color:#c9b97a44;color:#c9b97a;}
+.crew{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.emp{background:#101010;border:1px solid #1c1c1c;border-radius:11px;padding:20px;cursor:pointer;transition:all .15s;}
+.emp:hover{border-color:#c9b97a44;transform:translateY(-2px);}
+.emp-top{display:flex;align-items:center;gap:13px;margin-bottom:14px;}
+.emp-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;flex-shrink:0;}
+.emp-name{font-size:15px;color:#f0ede6;font-weight:500;}
+.emp-role{font-size:11px;color:#888;}
+.emp-skill{font-size:11px;color:#c9b97a;background:#c9b97a12;border:1px solid #c9b97a25;border-radius:7px;padding:8px 11px;margin-bottom:11px;}
+.emp-desc{font-size:12px;color:#999;line-height:1.6;}
+.emp-status{margin-top:12px;font-size:10px;color:#5cba5c;}
+.auto-list{display:flex;flex-direction:column;gap:11px;}
+.auto{background:#101010;border:1px solid #1c1c1c;border-radius:10px;padding:15px 18px;display:flex;align-items:center;gap:15px;}
+.auto-ico{width:38px;height:38px;border-radius:9px;background:#c9b97a15;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
+.auto-info{flex:1;}
+.auto-name{font-size:13px;color:#ddd;margin-bottom:3px;}
+.auto-flow{font-size:11px;color:#777;}
+.toggle{width:38px;height:21px;border-radius:20px;background:#1a3a1a;position:relative;flex-shrink:0;border:1px solid #2a5a2a;cursor:pointer;}
+.toggle::after{content:'';position:absolute;width:15px;height:15px;border-radius:50%;background:#5cba5c;top:2px;right:2px;transition:all .2s;}
+.toggle.off{background:#2a1a1a;border-color:#3a2a2a;}
+.toggle.off::after{background:#888;left:2px;right:auto;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;}
+.modal-bg.show{display:flex;}
+.modal{background:#101010;border:1px solid #2a2a2a;border-radius:14px;padding:26px;width:380px;max-width:90vw;}
+.modal-h{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f0ede6;margin-bottom:18px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.field input,.field select{width:100%;padding:10px 12px;background:#080808;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e3;font-size:13px;font-family:'Jost',sans-serif;outline:none;}
+.field input:focus,.field select:focus{border-color:#c9b97a66;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.modal-actions .btn{flex:1;justify-content:center;}
+.loading{display:flex;align-items:center;justify-content:center;height:200px;color:#666;font-size:13px;gap:10px;}
+.spinner{width:16px;height:16px;border:2px solid #2a2a2a;border-top-color:#c9b97a;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr);}.board{grid-template-columns:repeat(2,1fr);}.crew{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="dash">
+  <div class="side">
+    <div class="side-brand"><div class="side-logo">Avèlon</div><div class="side-sub">Zentrale</div></div>
+    <div class="side-nav" id="nav">
+      <div class="nav-item active" data-view="home"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Übersicht</div>
+      <div class="nav-item" data-view="akquise"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>Akquise-Board</div>
+      <div class="nav-item" data-view="crew"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>KI-Mitarbeiter</div>
+      <div class="nav-item" data-view="pipeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Kunden-Pipeline</div>
+      <div class="nav-item" data-view="auto"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Automatisierungen</div>
+    </div>
+    <div class="side-foot"><div class="foot-av">CP</div><div><div class="foot-name">Can Papenheim</div><div class="foot-role">Founder</div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="top-title" id="viewTitle">Übersicht</div>
+      <div class="top-git sync" id="status"><span class="git-dot"></span> <span id="statusText">Verbinde…</span></div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-h" id="modalTitle">Neuer Lead</div>
+    <div class="field"><label>Firmenname</label><input id="mName" placeholder="z.B. Malermeister Krüger"/></div>
+    <div class="field"><label>Branche</label><input id="mBranch" placeholder="z.B. Maler & Lackierer"/></div>
+    <div class="field"><label>Stadtteil / Ort</label><input id="mLoc" placeholder="z.B. Hamm-Mitte"/></div>
+    <div class="field"><label>Demo-Link (optional)</label><input id="mDemo" placeholder="https://…netlify.app"/></div>
+    <div class="field"><label>Status</label>
+      <select id="mStatus">
+        <option value="recherchiert">Recherchiert</option>
+        <option value="demo">Demo gebaut</option>
+        <option value="kontaktiert">Kontaktiert</option>
+        <option value="kunde">Kunde</option>
+        <option value="verloren">Verloren</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Abbrechen</button>
+      <button class="btn btn-gold" onclick="saveLead()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── SUPABASE VERBINDUNG ─────────────────────────────────
+const SUPABASE_URL = 'https://eurrqzerazjkasemmigu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8LPC3POTvsuj__9Wu0s_nw_ZP7mrYIe';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let leads = [];
+let autos = { 'auto-deploy':true, 'social':true, 'mails':false, 'tracking':true, 'rechnung':false };
+
+const COLS = [
+  {key:'recherchiert', label:'Recherchiert'},
+  {key:'demo', label:'Demo gebaut'},
+  {key:'kontaktiert', label:'Kontaktiert'},
+  {key:'kunde', label:'Kunde'},
+  {key:'verloren', label:'Verloren'}
+];
+
+function setStatus(mode,text){
+  const el=document.getElementById('status');
+  el.className='top-git '+mode;
+  document.getElementById('statusText').textContent=text;
+}
+
+async function loadLeads(){
+  setStatus('sync','Lade Daten…');
+  const {data,error}=await sb.from('leads').select('*').order('created_at',{ascending:true});
+  if(error){setStatus('offline','Offline');console.error(error);return;}
+  leads=data||[];
+  setStatus('online','Live verbunden');
+}
+
+// ─── VIEWS ───────────────────────────────────────────────
+const views = {
+  home: ()=>{
+    const aktiv=leads.filter(l=>l.status==='kunde').length;
+    const akq=leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length;
+    const demos=leads.filter(l=>l.status==='demo').length;
+    return `
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Aktive Kunden</div><div class="stat-num">${aktiv}</div><div class="stat-trend">&nbsp;</div></div>
+      <div class="stat"><div class="stat-label">Akquise-Leads</div><div class="stat-num gold">${akq}</div><div class="stat-trend">${demos} Demos bereit</div></div>
+      <div class="stat"><div class="stat-label">Laufende Projekte</div><div class="stat-num">${aktiv}</div><div class="stat-trend">&nbsp;</div></div>
+      <div class="stat"><div class="stat-label">Umsatz Monat</div><div class="stat-num gold">€0</div><div class="stat-trend">&nbsp;</div></div>
+    </div>
+    <div class="section-h">Aktuell</div>
+    <div class="row2">
+      <div class="panel">
+        <div class="panel-h">Nächste Schritte <span>heute</span></div>
+        <div class="li"><span class="li-name">RuhrExpress24 — Fotos einbauen & online</span><span class="pill pill-gold">Offen</span></div>
+        <div class="li"><span class="li-name">Echte Hammer Leads recherchieren</span><span class="pill pill-blue">Geplant</span></div>
+        <div class="li"><span class="li-name">Instagram — ersten Post planen</span><span class="pill pill-grey">Geplant</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">Letzte Aktivität <span>System</span></div>
+        <div class="li"><span class="li-name">Zentrale mit Datenbank verbunden</span><span class="li-meta">gerade</span></div>
+        <div class="li"><span class="li-name">RuhrExpress24 Demo gebaut</span><span class="li-meta">heute</span></div>
+        <div class="li"><span class="li-name">Visitenkarte v2 finalisiert</span><span class="li-meta">heute</span></div>
+      </div>
+    </div>`;
+  },
+  akquise: ()=>{
+    let cols=COLS.map(col=>{
+      const items=leads.filter(l=>l.status===col.key);
+      const cards=items.map(l=>`
+        <div class="card" draggable="true" data-id="${l.id}">
+          <button class="card-del" onclick="delLead(${l.id},event)">×</button>
+          <div class="card-name">${esc(l.name)}</div>
+          <div class="card-branch">${esc(l.branch||'—')}</div>
+          <div class="card-foot">
+            <span class="card-loc">${esc(l.loc||'Hamm')}</span>
+            ${l.demo_url?`<a class="card-demo" href="${esc(l.demo_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Demo →</a>`:col.key==='kunde'?'<span class="pill pill-green">Kunde</span>':col.key==='verloren'?'<span class="pill pill-red">Verloren</span>':col.key==='kontaktiert'?'<span class="pill pill-blue">Mail raus</span>':''}
+          </div>
+        </div>`).join('');
+      return `<div class="col" data-col="${col.key}">
+        <div class="col-h">${col.label} <span class="col-count">${items.length}</span></div>
+        ${cards}
+        <button class="add-card" onclick="openModal('${col.key}')">+ Hinzufügen</button>
+      </div>`;
+    }).join('');
+    return `
+    <div class="board-head">
+      <div class="board-desc">Unternehmen in Hamm ohne Website. Karten per Drag & Drop verschieben — alles wird live in der Datenbank gespeichert und ist auf allen Geräten sichtbar.</div>
+      <button class="btn btn-gold" onclick="openModal('recherchiert')">+ Neuer Lead</button>
+    </div>
+    <div class="board" id="board">${cols}</div>`;
+  },
+  crew: ()=>`
+    <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Deine Crew — jeder mit eigenem System Prompt und GitHub-Skill.</p>
+    <div class="crew">
+      ${[
+        ['K','Kim','Design-Direktorin','#c9b97a','design-system','Layouts, Farbpaletten, Typografie. Kennt das komplette AvèlonStudios Design-System.'],
+        ['L','Lukas','Web Developer','#7a9bc9','frontend-design','HTML, CSS, JS. Baut & reviewed Code, optimiert Performance für Netlify.'],
+        ['S','Sara','Marketing','#c97ab0','content-creator','Instagram, TikTok, Captions. Schreibt im AvèlonStudios-Ton für lokale Zielgruppen.'],
+        ['T','Tom','Account Manager','#7ac9a0','docx','Angebote, Übergabe-Mails, Verträge. Kennt alle Preise und Konditionen.'],
+        ['F','Felix','SEO & Akquise','#c9a07a','web-research','Findet Hammer Unternehmen ohne Website, recherchiert Kontakte, baut Lead-Listen.']
+      ].map(e=>`
+        <div class="emp">
+          <div class="emp-top"><div class="emp-av" style="background:${e[3]}22;color:${e[3]};">${e[0]}</div><div><div class="emp-name">${e[1]}</div><div class="emp-role">${e[2]}</div></div></div>
+          <div class="emp-skill">⬡ Skill: ${e[4]}</div>
+          <div class="emp-desc">${e[5]}</div>
+          <div class="emp-status">● Bereit</div>
+        </div>`).join('')}
+      <div class="emp" style="border-style:dashed;opacity:.6;">
+        <div class="emp-top"><div class="emp-av" style="background:#33333322;color:#888;">+</div><div><div class="emp-name">Neuer Mitarbeiter</div><div class="emp-role">Rolle definieren</div></div></div>
+        <div class="emp-desc" style="margin-top:13px;">Erstelle einen neuen KI-Mitarbeiter mit eigenem Skill und System Prompt.</div>
+      </div>
+    </div>`,
+  pipeline: ()=>{
+    const kunden=leads.filter(l=>l.status==='kunde');
+    const rows=kunden.length?kunden.map(k=>`<div class="li"><div><div class="li-name">${esc(k.name)}</div><div class="li-meta">${esc(k.branch||'')}</div></div><span class="pill pill-gold">Aktiv</span></div>`).join(''):'<div class="li"><span class="li-meta">Noch keine aktiven Kunden — gewinne deinen ersten über das Akquise-Board.</span></div>';
+    return `
+    <div class="row2">
+      <div class="panel"><div class="panel-h">Aktive Projekte</div>${rows}</div>
+      <div class="panel">
+        <div class="panel-h">Umsatz-Übersicht</div>
+        <div class="li"><span class="li-name">Abgeschlossen (Monat)</span><span class="li-meta" style="color:#c9b97a;">€0</span></div>
+        <div class="li"><span class="li-name">In Pipeline</span><span class="li-meta" style="color:#7aaad0;">€0</span></div>
+        <div class="li"><span class="li-name">Akquise-Potenzial</span><span class="li-meta" style="color:#888;">€${(leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length*599).toLocaleString('de-DE')}</span></div>
+      </div>
+    </div>`;
+  },
+  auto: ()=>`
+    <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Laufende Prozesse die automatisch im Hintergrund arbeiten — über GitHub Actions & Make.com.</p>
+    <div class="auto-list">
+      ${[
+        ['auto-deploy','🚀','Auto-Deploy','GitHub Push → Netlify Live'],
+        ['social','📸','Social Media Posting','Notion geplant → Instagram & TikTok'],
+        ['mails','✉️','Akquise-Mails','Demo fertig → Mail an Unternehmen'],
+        ['tracking','📋','Projekt-Tracking','Neuer Kunde → Notion-Seite + Repo-Ordner'],
+        ['rechnung','🧾','Rechnungs-Generator','Projekt fertig → PDF-Rechnung']
+      ].map(a=>`
+        <div class="auto"><div class="auto-ico">${a[1]}</div><div class="auto-info"><div class="auto-name">${a[2]}</div><div class="auto-flow">${a[3]}</div></div><div class="toggle ${autos[a[0]]?'':'off'}" onclick="toggleAuto('${a[0]}',this)"></div></div>
+      `).join('')}
+    </div>`
+};
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+const nav=document.getElementById('nav');
+const content=document.getElementById('content');
+const viewTitle=document.getElementById('viewTitle');
+const titles={home:'Übersicht',akquise:'Akquise-Board',crew:'KI-Mitarbeiter',pipeline:'Kunden-Pipeline',auto:'Automatisierungen'};
+let currentView='home';
+
+function show(view){
+  currentView=view;
+  content.innerHTML=views[view]();
+  viewTitle.textContent=titles[view];
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
+  if(view==='akquise') initDragDrop();
+}
+nav.addEventListener('click',e=>{const item=e.target.closest('.nav-item');if(item)show(item.dataset.view);});
+
+function initDragDrop(){
+  let dragged=null;
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('dragstart',()=>{dragged=card;card.classList.add('dragging');});
+    card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;});
+  });
+  document.querySelectorAll('.col').forEach(col=>{
+    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('dragover');});
+    col.addEventListener('dragleave',()=>col.classList.remove('dragover'));
+    col.addEventListener('drop',async e=>{
+      e.preventDefault();col.classList.remove('dragover');
+      if(!dragged)return;
+      const id=+dragged.dataset.id;
+      const newStatus=col.dataset.col;
+      const lead=leads.find(l=>l.id===id);
+      if(lead&&lead.status!==newStatus){
+        lead.status=newStatus;
+        show('akquise');
+        setStatus('sync','Speichere…');
+        const {error}=await sb.from('leads').update({status:newStatus}).eq('id',id);
+        setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+      }
+    });
+  });
+}
+
+let modalStatus='recherchiert';
+function openModal(status){
+  modalStatus=status||'recherchiert';
+  ['mName','mBranch','mLoc','mDemo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mStatus').value=modalStatus;
+  document.getElementById('modalBg').classList.add('show');
+  setTimeout(()=>document.getElementById('mName').focus(),50);
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('show');}
+
+async function saveLead(){
+  const name=document.getElementById('mName').value.trim();
+  if(!name){document.getElementById('mName').focus();return;}
+  const newLead={
+    name,
+    branch:document.getElementById('mBranch').value.trim()||null,
+    loc:document.getElementById('mLoc').value.trim()||'Hamm',
+    demo_url:document.getElementById('mDemo').value.trim()||null,
+    status:document.getElementById('mStatus').value
+  };
+  closeModal();
+  setStatus('sync','Speichere…');
+  const {data,error}=await sb.from('leads').insert(newLead).select();
+  if(error){setStatus('offline','Fehler');console.error(error);return;}
+  leads.push(data[0]);
+  setStatus('online','Live verbunden');
+  show('akquise');
+}
+
+async function delLead(id,e){
+  e.stopPropagation();
+  leads=leads.filter(l=>l.id!==id);
+  show('akquise');
+  setStatus('sync','Lösche…');
+  const {error}=await sb.from('leads').delete().eq('id',id);
+  setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+}
+
+function toggleAuto(key,el){autos[key]=!autos[key];el.classList.toggle('off');}
+
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
+
+// ─── START ───────────────────────────────────────────────
+(async()=>{
+  await loadLeads();
+  show('home');
+})();
+</script>
+</body>
+</html>
