@@ -38,12 +38,67 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .btn:hover{border-color:#c9b97a55;color:#fff;}
 .btn-gold{background:#c9b97a;color:#1a1a1a;border-color:#c9b97a;font-weight:500;}
 .btn-gold:hover{background:#d4c688;color:#1a1a1a;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:26px;}
-.stat{background:#101010;border:1px solid #1c1c1c;border-radius:10px;padding:17px 18px;}
-.stat-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#777;margin-bottom:10px;}
-.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;color:#f0ede6;line-height:1;}
-.stat-num.gold{color:#c9b97a;}
-.stat-trend{font-size:11px;color:#5cba5c;margin-top:7px;}
+.greeting{margin-bottom:22px;}
+.greeting h1{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:#f0ede6;line-height:1.1;}
+.greeting p{font-size:13px;color:#888;margin-top:5px;}
+.ov-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start;}
+.ov-col{display:flex;flex-direction:column;gap:18px;}
+.card-box{background:#101010;border:1px solid #1c1c1c;border-radius:13px;padding:20px;}
+.card-box .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.card-box .ch h3{font-size:13px;letter-spacing:.05em;color:#e8e8e3;font-weight:600;display:flex;align-items:center;gap:9px;}
+.ch-ico{width:26px;height:26px;border-radius:7px;background:#c9b97a15;display:flex;align-items:center;justify-content:center;font-size:14px;color:#c9b97a;}
+.ch-count{font-size:10px;color:#888;background:#1a1a1a;padding:3px 9px;border-radius:10px;}
+.todo-add{display:flex;gap:8px;margin-bottom:14px;}
+.todo-add input{flex:1;padding:9px 13px;background:#080808;border:1px solid #222;border-radius:8px;color:#e8e8e3;font-size:13px;font-family:'Jost',sans-serif;outline:none;}
+.todo-add input:focus{border-color:#c9b97a55;}
+.todo-add button{padding:9px 14px;background:#c9b97a;color:#1a1a1a;border:none;border-radius:8px;font-size:18px;line-height:1;cursor:pointer;font-weight:500;}
+.todo-list{display:flex;flex-direction:column;gap:2px;}
+.todo{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:8px;transition:background .12s;}
+.todo:hover{background:#0c0c0c;}
+.todo-check{width:20px;height:20px;border-radius:6px;border:1.5px solid #333;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.todo-check:hover{border-color:#c9b97a;}
+.todo-check.done{background:#c9b97a;border-color:#c9b97a;}
+.todo-check.done svg{stroke:#1a1a1a;}
+.todo-text{flex:1;font-size:13.5px;color:#ddd;transition:all .15s;}
+.todo.done .todo-text{color:#555;text-decoration:line-through;}
+.todo-del{width:22px;height:22px;border:none;background:none;color:#444;cursor:pointer;font-size:15px;opacity:0;transition:all .15s;border-radius:5px;flex-shrink:0;}
+.todo:hover .todo-del{opacity:1;}
+.todo-del:hover{background:#3a1a1a;color:#c97a7a;}
+.todo-empty{text-align:center;padding:24px;color:#555;font-size:12.5px;}
+.mini-board{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.mini-col{text-align:center;padding:14px 6px;background:#0c0c0c;border:1px solid #1a1a1a;border-radius:9px;cursor:pointer;transition:all .15s;}
+.mini-col:hover{border-color:#c9b97a44;transform:translateY(-2px);}
+.mini-num{font-family:'Cormorant Garamond',serif;font-size:28px;color:#f0ede6;line-height:1;}
+.mini-num.gold{color:#c9b97a;}
+.mini-num.green{color:#7ac97a;}
+.mini-num.red{color:#c97a7a;}
+.mini-label{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#777;margin-top:7px;}
+.action{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid #181818;}
+.action:last-child{border-bottom:none;}
+.action-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.action-body{flex:1;min-width:0;}
+.action-name{font-size:13.5px;color:#e8e8e3;font-weight:500;}
+.action-hint{font-size:11.5px;color:#888;margin-top:2px;}
+.action-go{font-size:11px;color:#c9b97a;text-decoration:none;border:1px solid #c9b97a33;padding:4px 11px;border-radius:14px;white-space:nowrap;transition:all .15s;flex-shrink:0;cursor:pointer;}
+.action-go:hover{background:#c9b97a1a;}
+.action-empty{text-align:center;padding:20px;color:#555;font-size:12.5px;}
+.goal-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;}
+.goal-now{font-family:'Cormorant Garamond',serif;font-size:34px;color:#c9b97a;line-height:1;}
+.goal-target{font-size:12px;color:#888;}
+.goal-bar{height:9px;background:#1a1a1a;border-radius:10px;overflow:hidden;margin-bottom:8px;}
+.goal-fill{height:100%;background:linear-gradient(90deg,#c9b97a,#d4c688);border-radius:10px;transition:width .6s;}
+.goal-meta{display:flex;justify-content:space-between;font-size:11px;color:#777;}
+.umsatz-rows{margin-top:18px;}
+.urow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #181818;font-size:13px;}
+.urow:last-child{border-bottom:none;}
+.urow-label{color:#aaa;}
+.urow-val{font-weight:500;}
+.statline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.statmini{background:#101010;border:1px solid #1c1c1c;border-radius:11px;padding:15px 16px;}
+.statmini-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#777;margin-bottom:8px;}
+.statmini-num{font-family:'Cormorant Garamond',serif;font-size:30px;color:#f0ede6;line-height:1;}
+.statmini-num.gold{color:#c9b97a;}
+.statmini-sub{font-size:10.5px;color:#5cba5c;margin-top:5px;}
 .section-h{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#888;margin:24px 0 14px;display:flex;align-items:center;gap:11px;}
 .section-h::after{content:'';flex:1;height:1px;background:#1a1a1a;}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -70,15 +125,17 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .card{background:#141414;border:1px solid #222;border-radius:8px;padding:11px;margin-bottom:9px;cursor:grab;transition:all .15s;position:relative;}
 .card:hover{border-color:#c9b97a55;}
 .card.dragging{opacity:.4;}
-.card-name{font-size:12px;color:#e8e8e3;font-weight:500;margin-bottom:3px;padding-right:18px;}
+.card-name{font-size:12px;color:#e8e8e3;font-weight:500;margin-bottom:3px;padding-right:34px;}
 .card-branch{font-size:10px;color:#888;margin-bottom:8px;}
 .card-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;}
 .card-loc{font-size:9px;color:#666;}
 .card-demo{font-size:9px;color:#c9b97a;text-decoration:none;border:1px solid #c9b97a33;padding:2px 7px;border-radius:10px;transition:all .15s;}
 .card-demo:hover{background:#c9b97a1a;}
-.card-del{position:absolute;top:9px;right:9px;width:15px;height:15px;border-radius:4px;background:#1e1e1e;color:#888;border:none;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;}
-.card:hover .card-del{opacity:1;}
-.card-del:hover{background:#3a1a1a;color:#c97a7a;}
+.card-acts{position:absolute;top:9px;right:9px;display:flex;gap:4px;opacity:0;transition:all .15s;}
+.card:hover .card-acts{opacity:1;}
+.card-act{width:16px;height:16px;border-radius:4px;background:#1e1e1e;color:#888;border:none;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.card-act:hover{background:#c9b97a22;color:#c9b97a;}
+.card-act.del:hover{background:#3a1a1a;color:#c97a7a;}
 .add-card{width:100%;padding:9px;background:transparent;border:1px dashed #2a2a2a;border-radius:8px;color:#666;font-size:11px;cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;}
 .add-card:hover{border-color:#c9b97a44;color:#c9b97a;}
 .crew{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
@@ -111,10 +168,7 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .field input:focus,.field select:focus{border-color:#c9b97a66;}
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .modal-actions .btn{flex:1;justify-content:center;}
-.loading{display:flex;align-items:center;justify-content:center;height:200px;color:#666;font-size:13px;gap:10px;}
-.spinner{width:16px;height:16px;border:2px solid #2a2a2a;border-top-color:#c9b97a;border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr);}.board{grid-template-columns:repeat(2,1fr);}.crew{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}}
+@media(max-width:1000px){.ov-grid{grid-template-columns:1fr;}.statline{grid-template-columns:repeat(2,1fr);}.board{grid-template-columns:repeat(2,1fr);}.crew{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -138,7 +192,6 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
     <div class="content" id="content"></div>
   </div>
 </div>
-
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-h" id="modalTitle">Neuer Lead</div>
@@ -157,77 +210,123 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal()">Abbrechen</button>
-      <button class="btn btn-gold" onclick="saveLead()">Speichern</button>
+      <button class="btn btn-gold" id="modalSave" onclick="saveLead()">Speichern</button>
     </div>
   </div>
 </div>
-
 <script>
-// ─── SUPABASE VERBINDUNG ─────────────────────────────────
-const SUPABASE_URL = 'https://eurrqzerazjkasemmigu.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_8LPC3POTvsuj__9Wu0s_nw_ZP7mrYIe';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-let leads = [];
-let autos = { 'auto-deploy':true, 'social':true, 'mails':false, 'tracking':true, 'rechnung':false };
-
-const COLS = [
-  {key:'recherchiert', label:'Recherchiert'},
-  {key:'demo', label:'Demo gebaut'},
-  {key:'kontaktiert', label:'Kontaktiert'},
-  {key:'kunde', label:'Kunde'},
-  {key:'verloren', label:'Verloren'}
+const SUPABASE_URL='https://eurrqzerazjkasemmigu.supabase.co';
+const SUPABASE_KEY='sb_publishable_8LPC3POTvsuj__9Wu0s_nw_ZP7mrYIe';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let leads=[],todos=[];
+let autos={'auto-deploy':true,'social':true,'mails':false,'tracking':true,'rechnung':false};
+const MONATSZIEL=2000,PAKETWERT=599;
+const COLS=[
+  {key:'recherchiert',label:'Recherchiert',cls:''},
+  {key:'demo',label:'Demo gebaut',cls:'gold'},
+  {key:'kontaktiert',label:'Kontaktiert',cls:''},
+  {key:'kunde',label:'Kunde',cls:'green'},
+  {key:'verloren',label:'Verloren',cls:'red'}
 ];
-
-function setStatus(mode,text){
-  const el=document.getElementById('status');
-  el.className='top-git '+mode;
-  document.getElementById('statusText').textContent=text;
-}
-
-async function loadLeads(){
+function setStatus(mode,text){const el=document.getElementById('status');el.className='top-git '+mode;document.getElementById('statusText').textContent=text;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+async function loadAll(){
   setStatus('sync','Lade Daten…');
-  const {data,error}=await sb.from('leads').select('*').order('created_at',{ascending:true});
-  if(error){setStatus('offline','Offline');console.error(error);return;}
-  leads=data||[];
+  const [l,t]=await Promise.all([
+    sb.from('leads').select('*').order('created_at',{ascending:true}),
+    sb.from('todos').select('*').order('created_at',{ascending:true})
+  ]);
+  if(l.error||t.error){setStatus('offline','Offline');console.error(l.error||t.error);return;}
+  leads=l.data||[];todos=t.data||[];
   setStatus('online','Live verbunden');
 }
-
-// ─── VIEWS ───────────────────────────────────────────────
-const views = {
-  home: ()=>{
+function greetingText(){const h=new Date().getHours();if(h<11)return'Guten Morgen';if(h<18)return'Guten Tag';return'Guten Abend';}
+function nextActions(){
+  const acts=[];
+  leads.filter(l=>l.status==='demo').forEach(l=>acts.push({color:'#c9b97a',name:l.name,hint:'Demo fertig — jetzt Kunde anschreiben',go:'akquise'}));
+  leads.filter(l=>l.status==='recherchiert').slice(0,3).forEach(l=>acts.push({color:'#7aaad0',name:l.name,hint:'Recherchiert — Demo bauen',go:'akquise'}));
+  leads.filter(l=>l.status==='kontaktiert').forEach(l=>acts.push({color:'#7ac97a',name:l.name,hint:'Kontaktiert — nachfassen wenn keine Antwort',go:'akquise'}));
+  return acts.slice(0,5);
+}
+const views={
+  home:()=>{
     const aktiv=leads.filter(l=>l.status==='kunde').length;
     const akq=leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length;
     const demos=leads.filter(l=>l.status==='demo').length;
+    const kontaktiert=leads.filter(l=>l.status==='kontaktiert').length;
+    const offen=todos.filter(t=>!t.done).length;
+    const umsatz=aktiv*PAKETWERT;
+    const pct=Math.min(100,Math.round(umsatz/MONATSZIEL*100));
+    const todoItems=todos.length?todos.map(t=>`
+      <div class="todo ${t.done?'done':''}">
+        <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})">${t.done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>':''}</div>
+        <div class="todo-text">${esc(t.text)}</div>
+        <button class="todo-del" onclick="delTodo(${t.id})">×</button>
+      </div>`).join(''):'<div class="todo-empty">Keine Aufgaben — alles erledigt. ✦</div>';
+    const miniCols=COLS.map(c=>{const n=leads.filter(l=>l.status===c.key).length;return `<div class="mini-col" onclick="show('akquise')"><div class="mini-num ${c.cls}">${n}</div><div class="mini-label">${c.label}</div></div>`;}).join('');
+    const acts=nextActions();
+    const actItems=acts.length?acts.map(a=>`
+      <div class="action">
+        <span class="action-dot" style="background:${a.color}"></span>
+        <div class="action-body"><div class="action-name">${esc(a.name)}</div><div class="action-hint">${esc(a.hint)}</div></div>
+        <a class="action-go" onclick="show('${a.go}')">Öffnen</a>
+      </div>`).join(''):'<div class="action-empty">Keine offenen Aktionen. Zeit, neue Leads zu recherchieren.</div>';
     return `
-    <div class="stats">
-      <div class="stat"><div class="stat-label">Aktive Kunden</div><div class="stat-num">${aktiv}</div><div class="stat-trend">&nbsp;</div></div>
-      <div class="stat"><div class="stat-label">Akquise-Leads</div><div class="stat-num gold">${akq}</div><div class="stat-trend">${demos} Demos bereit</div></div>
-      <div class="stat"><div class="stat-label">Laufende Projekte</div><div class="stat-num">${aktiv}</div><div class="stat-trend">&nbsp;</div></div>
-      <div class="stat"><div class="stat-label">Umsatz Monat</div><div class="stat-num gold">€0</div><div class="stat-trend">&nbsp;</div></div>
+    <div class="greeting">
+      <h1>${greetingText()}, Can.</h1>
+      <p>${offen>0?`Du hast ${offen} ${offen===1?'offene Aufgabe':'offene Aufgaben'} und ${acts.length} ${acts.length===1?'nächsten Schritt':'nächste Schritte'} heute.`:'Keine offenen Aufgaben — guter Tag um neue Leads zu gewinnen.'}</p>
     </div>
-    <div class="section-h">Aktuell</div>
-    <div class="row2">
-      <div class="panel">
-        <div class="panel-h">Nächste Schritte <span>heute</span></div>
-        <div class="li"><span class="li-name">RuhrExpress24 — Fotos einbauen & online</span><span class="pill pill-gold">Offen</span></div>
-        <div class="li"><span class="li-name">Echte Hammer Leads recherchieren</span><span class="pill pill-blue">Geplant</span></div>
-        <div class="li"><span class="li-name">Instagram — ersten Post planen</span><span class="pill pill-grey">Geplant</span></div>
+    <div class="statline">
+      <div class="statmini"><div class="statmini-label">Aktive Kunden</div><div class="statmini-num">${aktiv}</div><div class="statmini-sub">&nbsp;</div></div>
+      <div class="statmini"><div class="statmini-label">Akquise-Leads</div><div class="statmini-num gold">${akq}</div><div class="statmini-sub">${demos} ${demos===1?'Demo':'Demos'} bereit</div></div>
+      <div class="statmini"><div class="statmini-label">Wartet auf Antwort</div><div class="statmini-num">${kontaktiert}</div><div class="statmini-sub">&nbsp;</div></div>
+      <div class="statmini"><div class="statmini-label">Umsatz Monat</div><div class="statmini-num gold">€${umsatz.toLocaleString('de-DE')}</div><div class="statmini-sub">${pct}% vom Ziel</div></div>
+    </div>
+    <div class="ov-grid">
+      <div class="ov-col">
+        <div class="card-box">
+          <div class="ch"><h3><span class="ch-ico">✓</span> Heute zu erledigen</h3><span class="ch-count">${offen} offen</span></div>
+          <div class="todo-add">
+            <input id="todoInput" placeholder="Neue Aufgabe…" onkeydown="if(event.key==='Enter')addTodo()"/>
+            <button onclick="addTodo()">+</button>
+          </div>
+          <div class="todo-list">${todoItems}</div>
+        </div>
+        <div class="card-box">
+          <div class="ch"><h3><span class="ch-ico">▦</span> Akquise-Schnellblick</h3><a class="action-go" onclick="show('akquise')">Board öffnen</a></div>
+          <div class="mini-board">${miniCols}</div>
+        </div>
       </div>
-      <div class="panel">
-        <div class="panel-h">Letzte Aktivität <span>System</span></div>
-        <div class="li"><span class="li-name">Zentrale mit Datenbank verbunden</span><span class="li-meta">gerade</span></div>
-        <div class="li"><span class="li-name">RuhrExpress24 Demo gebaut</span><span class="li-meta">heute</span></div>
-        <div class="li"><span class="li-name">Visitenkarte v2 finalisiert</span><span class="li-meta">heute</span></div>
+      <div class="ov-col">
+        <div class="card-box">
+          <div class="ch"><h3><span class="ch-ico">→</span> Nächste Aktion</h3><span class="ch-count">${acts.length}</span></div>
+          ${actItems}
+        </div>
+        <div class="card-box">
+          <div class="ch"><h3><span class="ch-ico">€</span> Umsatz & Ziel</h3><span class="ch-count">${new Date().toLocaleDateString('de-DE',{month:'long'})}</span></div>
+          <div class="goal-top">
+            <div class="goal-now">€${umsatz.toLocaleString('de-DE')}</div>
+            <div class="goal-target">Ziel: €${MONATSZIEL.toLocaleString('de-DE')}</div>
+          </div>
+          <div class="goal-bar"><div class="goal-fill" style="width:${pct}%"></div></div>
+          <div class="goal-meta"><span>${pct}% erreicht</span><span>noch €${Math.max(0,MONATSZIEL-umsatz).toLocaleString('de-DE')}</span></div>
+          <div class="umsatz-rows">
+            <div class="urow"><span class="urow-label">Aktive Kunden</span><span class="urow-val" style="color:#c9b97a;">${aktiv} × €${PAKETWERT}</span></div>
+            <div class="urow"><span class="urow-label">In Pipeline (Potenzial)</span><span class="urow-val" style="color:#7aaad0;">€${(akq*PAKETWERT).toLocaleString('de-DE')}</span></div>
+          </div>
+        </div>
       </div>
     </div>`;
   },
-  akquise: ()=>{
+  akquise:()=>{
     let cols=COLS.map(col=>{
       const items=leads.filter(l=>l.status===col.key);
       const cards=items.map(l=>`
         <div class="card" draggable="true" data-id="${l.id}">
-          <button class="card-del" onclick="delLead(${l.id},event)">×</button>
+          <div class="card-acts">
+            <button class="card-act" onclick="editLead(${l.id},event)">✎</button>
+            <button class="card-act del" onclick="delLead(${l.id},event)">×</button>
+          </div>
           <div class="card-name">${esc(l.name)}</div>
           <div class="card-branch">${esc(l.branch||'—')}</div>
           <div class="card-foot">
@@ -243,12 +342,12 @@ const views = {
     }).join('');
     return `
     <div class="board-head">
-      <div class="board-desc">Unternehmen in Hamm ohne Website. Karten per Drag & Drop verschieben — alles wird live in der Datenbank gespeichert und ist auf allen Geräten sichtbar.</div>
+      <div class="board-desc">Unternehmen in Hamm ohne Website. Karten per Drag & Drop verschieben — alles wird live gespeichert. Mit ✎ bearbeiten, mit × löschen.</div>
       <button class="btn btn-gold" onclick="openModal('recherchiert')">+ Neuer Lead</button>
     </div>
     <div class="board" id="board">${cols}</div>`;
   },
-  crew: ()=>`
+  crew:()=>`
     <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Deine Crew — jeder mit eigenem System Prompt und GitHub-Skill.</p>
     <div class="crew">
       ${[
@@ -269,7 +368,7 @@ const views = {
         <div class="emp-desc" style="margin-top:13px;">Erstelle einen neuen KI-Mitarbeiter mit eigenem Skill und System Prompt.</div>
       </div>
     </div>`,
-  pipeline: ()=>{
+  pipeline:()=>{
     const kunden=leads.filter(l=>l.status==='kunde');
     const rows=kunden.length?kunden.map(k=>`<div class="li"><div><div class="li-name">${esc(k.name)}</div><div class="li-meta">${esc(k.branch||'')}</div></div><span class="pill pill-gold">Aktiv</span></div>`).join(''):'<div class="li"><span class="li-meta">Noch keine aktiven Kunden — gewinne deinen ersten über das Akquise-Board.</span></div>';
     return `
@@ -277,13 +376,13 @@ const views = {
       <div class="panel"><div class="panel-h">Aktive Projekte</div>${rows}</div>
       <div class="panel">
         <div class="panel-h">Umsatz-Übersicht</div>
-        <div class="li"><span class="li-name">Abgeschlossen (Monat)</span><span class="li-meta" style="color:#c9b97a;">€0</span></div>
-        <div class="li"><span class="li-name">In Pipeline</span><span class="li-meta" style="color:#7aaad0;">€0</span></div>
-        <div class="li"><span class="li-name">Akquise-Potenzial</span><span class="li-meta" style="color:#888;">€${(leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length*599).toLocaleString('de-DE')}</span></div>
+        <div class="li"><span class="li-name">Abgeschlossen (Monat)</span><span class="li-meta" style="color:#c9b97a;">€${(kunden.length*PAKETWERT).toLocaleString('de-DE')}</span></div>
+        <div class="li"><span class="li-name">In Pipeline</span><span class="li-meta" style="color:#7aaad0;">€${(leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length*PAKETWERT).toLocaleString('de-DE')}</span></div>
+        <div class="li"><span class="li-name">Monatsziel</span><span class="li-meta" style="color:#888;">€${MONATSZIEL.toLocaleString('de-DE')}</span></div>
       </div>
     </div>`;
   },
-  auto: ()=>`
+  auto:()=>`
     <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Laufende Prozesse die automatisch im Hintergrund arbeiten — über GitHub Actions & Make.com.</p>
     <div class="auto-list">
       ${[
@@ -297,24 +396,38 @@ const views = {
       `).join('')}
     </div>`
 };
-
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
 const nav=document.getElementById('nav');
 const content=document.getElementById('content');
 const viewTitle=document.getElementById('viewTitle');
 const titles={home:'Übersicht',akquise:'Akquise-Board',crew:'KI-Mitarbeiter',pipeline:'Kunden-Pipeline',auto:'Automatisierungen'};
 let currentView='home';
-
 function show(view){
   currentView=view;
   content.innerHTML=views[view]();
   viewTitle.textContent=titles[view];
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
-  if(view==='akquise') initDragDrop();
+  if(view==='akquise')initDragDrop();
 }
 nav.addEventListener('click',e=>{const item=e.target.closest('.nav-item');if(item)show(item.dataset.view);});
-
+async function addTodo(){
+  const inp=document.getElementById('todoInput');const text=inp.value.trim();if(!text)return;
+  inp.value='';setStatus('sync','Speichere…');
+  const {data,error}=await sb.from('todos').insert({text,done:false}).select();
+  if(error){setStatus('offline','Fehler');return;}
+  todos.push(data[0]);setStatus('online','Live verbunden');show('home');
+  setTimeout(()=>document.getElementById('todoInput')?.focus(),50);
+}
+async function toggleTodo(id){
+  const t=todos.find(x=>x.id===id);if(!t)return;t.done=!t.done;show('home');
+  setStatus('sync','Speichere…');
+  const {error}=await sb.from('todos').update({done:t.done}).eq('id',id);
+  setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+}
+async function delTodo(id){
+  todos=todos.filter(x=>x.id!==id);show('home');setStatus('sync','Lösche…');
+  const {error}=await sb.from('todos').delete().eq('id',id);
+  setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+}
 function initDragDrop(){
   let dragged=null;
   document.querySelectorAll('.card').forEach(card=>{
@@ -327,67 +440,70 @@ function initDragDrop(){
     col.addEventListener('drop',async e=>{
       e.preventDefault();col.classList.remove('dragover');
       if(!dragged)return;
-      const id=+dragged.dataset.id;
-      const newStatus=col.dataset.col;
+      const id=+dragged.dataset.id;const newStatus=col.dataset.col;
       const lead=leads.find(l=>l.id===id);
       if(lead&&lead.status!==newStatus){
-        lead.status=newStatus;
-        show('akquise');
-        setStatus('sync','Speichere…');
+        lead.status=newStatus;show('akquise');setStatus('sync','Speichere…');
         const {error}=await sb.from('leads').update({status:newStatus}).eq('id',id);
         setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
       }
     });
   });
 }
-
-let modalStatus='recherchiert';
+let modalStatus='recherchiert',editId=null;
 function openModal(status){
-  modalStatus=status||'recherchiert';
+  editId=null;modalStatus=status||'recherchiert';
+  document.getElementById('modalTitle').textContent='Neuer Lead';
+  document.getElementById('modalSave').textContent='Speichern';
   ['mName','mBranch','mLoc','mDemo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('mStatus').value=modalStatus;
   document.getElementById('modalBg').classList.add('show');
   setTimeout(()=>document.getElementById('mName').focus(),50);
 }
+function editLead(id,e){
+  e.stopPropagation();
+  const l=leads.find(x=>x.id===id);if(!l)return;editId=id;
+  document.getElementById('modalTitle').textContent='Lead bearbeiten';
+  document.getElementById('modalSave').textContent='Aktualisieren';
+  document.getElementById('mName').value=l.name||'';
+  document.getElementById('mBranch').value=l.branch||'';
+  document.getElementById('mLoc').value=l.loc||'';
+  document.getElementById('mDemo').value=l.demo_url||'';
+  document.getElementById('mStatus').value=l.status||'recherchiert';
+  document.getElementById('modalBg').classList.add('show');
+  setTimeout(()=>document.getElementById('mName').focus(),50);
+}
 function closeModal(){document.getElementById('modalBg').classList.remove('show');}
-
 async function saveLead(){
   const name=document.getElementById('mName').value.trim();
   if(!name){document.getElementById('mName').focus();return;}
-  const newLead={
+  const payload={
     name,
     branch:document.getElementById('mBranch').value.trim()||null,
     loc:document.getElementById('mLoc').value.trim()||'Hamm',
     demo_url:document.getElementById('mDemo').value.trim()||null,
     status:document.getElementById('mStatus').value
   };
-  closeModal();
-  setStatus('sync','Speichere…');
-  const {data,error}=await sb.from('leads').insert(newLead).select();
-  if(error){setStatus('offline','Fehler');console.error(error);return;}
-  leads.push(data[0]);
-  setStatus('online','Live verbunden');
-  show('akquise');
+  closeModal();setStatus('sync','Speichere…');
+  if(editId){
+    const {error}=await sb.from('leads').update(payload).eq('id',editId);
+    if(error){setStatus('offline','Fehler');return;}
+    const idx=leads.findIndex(l=>l.id===editId);if(idx>-1)leads[idx]={...leads[idx],...payload};
+  }else{
+    const {data,error}=await sb.from('leads').insert(payload).select();
+    if(error){setStatus('offline','Fehler');return;}
+    leads.push(data[0]);
+  }
+  setStatus('online','Live verbunden');show('akquise');
 }
-
 async function delLead(id,e){
-  e.stopPropagation();
-  leads=leads.filter(l=>l.id!==id);
-  show('akquise');
-  setStatus('sync','Lösche…');
+  e.stopPropagation();leads=leads.filter(l=>l.id!==id);show('akquise');setStatus('sync','Lösche…');
   const {error}=await sb.from('leads').delete().eq('id',id);
   setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
 }
-
 function toggleAuto(key,el){autos[key]=!autos[key];el.classList.toggle('off');}
-
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
-
-// ─── START ───────────────────────────────────────────────
-(async()=>{
-  await loadLeads();
-  show('home');
-})();
+(async()=>{await loadAll();show('home');})();
 </script>
 </body>
 </html>
