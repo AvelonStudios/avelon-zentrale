@@ -160,14 +160,40 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .toggle.off::after{background:#888;left:2px;right:auto;}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;}
 .modal-bg.show{display:flex;}
-.modal{background:#101010;border:1px solid #2a2a2a;border-radius:14px;padding:26px;width:380px;max-width:90vw;}
+.modal{background:#101010;border:1px solid #2a2a2a;border-radius:14px;padding:26px;width:380px;max-width:90vw;max-height:88vh;overflow-y:auto;}
 .modal-h{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f0ede6;margin-bottom:18px;}
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:6px;}
-.field input,.field select{width:100%;padding:10px 12px;background:#080808;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e3;font-size:13px;font-family:'Jost',sans-serif;outline:none;}
-.field input:focus,.field select:focus{border-color:#c9b97a66;}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;background:#080808;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e3;font-size:13px;font-family:'Jost',sans-serif;outline:none;resize:vertical;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#c9b97a66;}
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .modal-actions .btn{flex:1;justify-content:center;}
+/* DETAIL PANEL */
+.detail-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;justify-content:flex-end;z-index:90;}
+.detail-bg.show{display:flex;}
+.detail{width:420px;max-width:92vw;height:100%;background:#0c0c0c;border-left:1px solid #222;padding:0;overflow-y:auto;animation:slideIn .25s cubic-bezier(.2,.6,.2,1);}
+@keyframes slideIn{from{transform:translateX(40px);opacity:.5;}to{transform:none;opacity:1;}}
+.detail-head{padding:26px 28px 22px;border-bottom:1px solid #1a1a1a;position:relative;}
+.detail-status{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;display:inline-block;padding:4px 11px;border-radius:14px;}
+.detail-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:#f0ede6;line-height:1.1;margin-bottom:5px;}
+.detail-branch{font-size:13px;color:#999;}
+.detail-close{position:absolute;top:24px;right:24px;width:30px;height:30px;border-radius:8px;background:#1a1a1a;border:none;color:#999;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.detail-close:hover{background:#2a1a1a;color:#c97a7a;}
+.detail-body{padding:24px 28px;}
+.dfield{margin-bottom:20px;}
+.dfield-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#777;margin-bottom:7px;display:flex;align-items:center;gap:7px;}
+.dfield-val{font-size:14.5px;color:#e8e8e3;line-height:1.5;}
+.dfield-val a{color:#c9b97a;text-decoration:none;}
+.dfield-val a:hover{text-decoration:underline;}
+.dfield-val.empty{color:#555;font-style:italic;font-size:13px;}
+.detail-notes{background:#101010;border:1px solid #1c1c1c;border-radius:10px;padding:15px;font-size:13.5px;color:#bbb;line-height:1.65;white-space:pre-wrap;}
+.detail-actions{display:flex;gap:9px;margin-top:8px;flex-wrap:wrap;}
+.detail-actions .btn{flex:1;min-width:120px;justify-content:center;}
+.detail-map{display:block;margin-top:18px;text-align:center;background:#13110c;border:1px solid #c9b97a33;border-radius:9px;padding:12px;color:#c9b97a;font-size:13px;text-decoration:none;transition:all .15s;}
+.detail-map:hover{background:#1a1610;}
+.loading{display:flex;align-items:center;justify-content:center;height:200px;color:#666;font-size:13px;gap:10px;}
+.spinner{width:16px;height:16px;border:2px solid #2a2a2a;border-top-color:#c9b97a;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 @media(max-width:1000px){.ov-grid{grid-template-columns:1fr;}.statline{grid-template-columns:repeat(2,1fr);}.board{grid-template-columns:repeat(2,1fr);}.crew{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -192,13 +218,18 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
     <div class="content" id="content"></div>
   </div>
 </div>
+
+<!-- ADD/EDIT MODAL -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-h" id="modalTitle">Neuer Lead</div>
     <div class="field"><label>Firmenname</label><input id="mName" placeholder="z.B. Malermeister Krüger"/></div>
     <div class="field"><label>Branche</label><input id="mBranch" placeholder="z.B. Maler & Lackierer"/></div>
     <div class="field"><label>Stadtteil / Ort</label><input id="mLoc" placeholder="z.B. Hamm-Mitte"/></div>
-    <div class="field"><label>Demo-Link (optional)</label><input id="mDemo" placeholder="https://…netlify.app"/></div>
+    <div class="field"><label>Telefon</label><input id="mPhone" placeholder="z.B. 02381 123456"/></div>
+    <div class="field"><label>Kontaktperson</label><input id="mContact" placeholder="z.B. Frau Müller"/></div>
+    <div class="field"><label>Demo-Link</label><input id="mDemo" placeholder="https://…netlify.app"/></div>
+    <div class="field"><label>Notizen</label><textarea id="mNotes" rows="3" placeholder="Adresse, Besonderheiten, Recherche-Infos…"></textarea></div>
     <div class="field"><label>Status</label>
       <select id="mStatus">
         <option value="recherchiert">Recherchiert</option>
@@ -214,6 +245,12 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
     </div>
   </div>
 </div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-bg" id="detailBg">
+  <div class="detail" id="detailContent"></div>
+</div>
+
 <script>
 const SUPABASE_URL='https://eurrqzerazjkasemmigu.supabase.co';
 const SUPABASE_KEY='sb_publishable_8LPC3POTvsuj__9Wu0s_nw_ZP7mrYIe';
@@ -228,6 +265,8 @@ const COLS=[
   {key:'kunde',label:'Kunde',cls:'green'},
   {key:'verloren',label:'Verloren',cls:'red'}
 ];
+const STATUS_LABEL={recherchiert:'Recherchiert',demo:'Demo gebaut',kontaktiert:'Kontaktiert',kunde:'Kunde',verloren:'Verloren'};
+const STATUS_PILL={recherchiert:'pill-grey',demo:'pill-gold',kontaktiert:'pill-blue',kunde:'pill-green',verloren:'pill-red'};
 function setStatus(mode,text){const el=document.getElementById('status');el.className='top-git '+mode;document.getElementById('statusText').textContent=text;}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 async function loadAll(){
@@ -322,7 +361,7 @@ const views={
     let cols=COLS.map(col=>{
       const items=leads.filter(l=>l.status===col.key);
       const cards=items.map(l=>`
-        <div class="card" draggable="true" data-id="${l.id}">
+        <div class="card" draggable="true" data-id="${l.id}" onclick="openDetail(${l.id})">
           <div class="card-acts">
             <button class="card-act" onclick="editLead(${l.id},event)">✎</button>
             <button class="card-act del" onclick="delLead(${l.id},event)">×</button>
@@ -342,7 +381,7 @@ const views={
     }).join('');
     return `
     <div class="board-head">
-      <div class="board-desc">Unternehmen in Hamm ohne Website. Karten per Drag & Drop verschieben — alles wird live gespeichert. Mit ✎ bearbeiten, mit × löschen.</div>
+      <div class="board-desc">Unternehmen in Hamm ohne Website. Karte anklicken für alle Details, per Drag & Drop verschieben. Alles wird live gespeichert.</div>
       <button class="btn btn-gold" onclick="openModal('recherchiert')">+ Neuer Lead</button>
     </div>
     <div class="board" id="board">${cols}</div>`;
@@ -431,7 +470,7 @@ async function delTodo(id){
 function initDragDrop(){
   let dragged=null;
   document.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('dragstart',()=>{dragged=card;card.classList.add('dragging');});
+    card.addEventListener('dragstart',e=>{dragged=card;card.classList.add('dragging');});
     card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;});
   });
   document.querySelectorAll('.col').forEach(col=>{
@@ -450,25 +489,73 @@ function initDragDrop(){
     });
   });
 }
+// DETAIL PANEL
+function openDetail(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const mapsQuery=encodeURIComponent((l.name||'')+' '+(l.notes||'').split('.')[0]+' '+(l.loc||'Hamm'));
+  const c=document.getElementById('detailContent');
+  c.innerHTML=`
+    <div class="detail-head">
+      <button class="detail-close" onclick="closeDetail()">×</button>
+      <span class="detail-status pill ${STATUS_PILL[l.status]}">${STATUS_LABEL[l.status]||l.status}</span>
+      <div class="detail-name">${esc(l.name)}</div>
+      <div class="detail-branch">${esc(l.branch||'—')}</div>
+    </div>
+    <div class="detail-body">
+      <div class="dfield">
+        <div class="dfield-label">📍 Standort</div>
+        <div class="dfield-val ${l.loc?'':'empty'}">${esc(l.loc||'Nicht angegeben')}</div>
+      </div>
+      <div class="dfield">
+        <div class="dfield-label">📞 Telefon</div>
+        <div class="dfield-val ${l.phone?'':'empty'}">${l.phone?`<a href="tel:${esc(l.phone).replace(/\s/g,'')}">${esc(l.phone)}</a>`:'Noch zu recherchieren'}</div>
+      </div>
+      <div class="dfield">
+        <div class="dfield-label">👤 Kontaktperson</div>
+        <div class="dfield-val ${l.contact_person?'':'empty'}">${esc(l.contact_person||'Unbekannt')}</div>
+      </div>
+      <div class="dfield">
+        <div class="dfield-label">🌐 Demo / Website</div>
+        <div class="dfield-val ${l.demo_url?'':'empty'}">${l.demo_url?`<a href="${esc(l.demo_url)}" target="_blank" rel="noopener">${esc(l.demo_url)}</a>`:'Noch keine Demo gebaut'}</div>
+      </div>
+      <div class="dfield">
+        <div class="dfield-label">📝 Notizen & Recherche</div>
+        <div class="detail-notes">${esc(l.notes||'Keine Notizen hinterlegt.')}</div>
+      </div>
+      <a class="detail-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺 Auf Google Maps suchen</a>
+      <div class="detail-actions">
+        <button class="btn" onclick="editLead(${l.id},event)">✎ Bearbeiten</button>
+        ${l.phone?`<a class="btn btn-gold" href="tel:${esc(l.phone).replace(/\s/g,'')}">📞 Anrufen</a>`:''}
+      </div>
+    </div>`;
+  document.getElementById('detailBg').classList.add('show');
+}
+function closeDetail(){document.getElementById('detailBg').classList.remove('show');}
+document.getElementById('detailBg').addEventListener('click',e=>{if(e.target.id==='detailBg')closeDetail();});
+// MODAL
 let modalStatus='recherchiert',editId=null;
 function openModal(status){
   editId=null;modalStatus=status||'recherchiert';
   document.getElementById('modalTitle').textContent='Neuer Lead';
   document.getElementById('modalSave').textContent='Speichern';
-  ['mName','mBranch','mLoc','mDemo'].forEach(id=>document.getElementById(id).value='');
+  ['mName','mBranch','mLoc','mPhone','mContact','mDemo','mNotes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('mStatus').value=modalStatus;
   document.getElementById('modalBg').classList.add('show');
   setTimeout(()=>document.getElementById('mName').focus(),50);
 }
 function editLead(id,e){
-  e.stopPropagation();
+  if(e)e.stopPropagation();
   const l=leads.find(x=>x.id===id);if(!l)return;editId=id;
+  closeDetail();
   document.getElementById('modalTitle').textContent='Lead bearbeiten';
   document.getElementById('modalSave').textContent='Aktualisieren';
   document.getElementById('mName').value=l.name||'';
   document.getElementById('mBranch').value=l.branch||'';
   document.getElementById('mLoc').value=l.loc||'';
+  document.getElementById('mPhone').value=l.phone||'';
+  document.getElementById('mContact').value=l.contact_person||'';
   document.getElementById('mDemo').value=l.demo_url||'';
+  document.getElementById('mNotes').value=l.notes||'';
   document.getElementById('mStatus').value=l.status||'recherchiert';
   document.getElementById('modalBg').classList.add('show');
   setTimeout(()=>document.getElementById('mName').focus(),50);
@@ -481,7 +568,10 @@ async function saveLead(){
     name,
     branch:document.getElementById('mBranch').value.trim()||null,
     loc:document.getElementById('mLoc').value.trim()||'Hamm',
+    phone:document.getElementById('mPhone').value.trim()||null,
+    contact_person:document.getElementById('mContact').value.trim()||null,
     demo_url:document.getElementById('mDemo').value.trim()||null,
+    notes:document.getElementById('mNotes').value.trim()||null,
     status:document.getElementById('mStatus').value
   };
   closeModal();setStatus('sync','Speichere…');
@@ -497,7 +587,7 @@ async function saveLead(){
   setStatus('online','Live verbunden');show('akquise');
 }
 async function delLead(id,e){
-  e.stopPropagation();leads=leads.filter(l=>l.id!==id);show('akquise');setStatus('sync','Lösche…');
+  if(e)e.stopPropagation();leads=leads.filter(l=>l.id!==id);show('akquise');setStatus('sync','Lösche…');
   const {error}=await sb.from('leads').delete().eq('id',id);
   setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
 }
