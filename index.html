@@ -1111,7 +1111,7 @@ function resetImport(){
   document.getElementById('importConfirmBtn').style.display='none';
   importData=[];
 }
-function parseImport(){
+async function parseImport(){
   const raw=document.getElementById('importJson').value.trim();
   let entries;
   try{
@@ -1124,6 +1124,17 @@ function parseImport(){
     document.getElementById('importConfirmBtn').style.display='none';
     importData=[];return;
   }
+  // Aktuelle Daten frisch laden, damit Dubletten und Sperren nicht übersehen werden
+  document.getElementById('importMsg').innerHTML='<span style="color:#888;">Lade aktuelle Daten…</span>';
+  const [lRes,spRes]=await Promise.all([
+    sb.from('leads').select('id,name,firma,email,loc,bereich'),
+    sb.from('sperrliste').select('*')
+  ]);
+  if(lRes.error||spRes.error){
+    document.getElementById('importMsg').innerHTML=`<span style="color:#c97a7a;">Fehler beim Laden: ${esc((lRes.error||spRes.error).message)}</span>`;
+    return;
+  }
+  leads=lRes.data||[];sperrliste=spRes.data||[];
   const seenEmails=new Set();
   importData=entries.map(entry=>{
     const bereich=entry.bereich||'website';
