@@ -26,6 +26,11 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .topbar{padding:18px 30px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .top-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:#f0ede6;}
+.top-right{display:flex;align-items:center;gap:14px;}
+.switcher{display:flex;gap:2px;background:#0c0c0c;border:1px solid #1e1e1e;border-radius:9px;padding:3px;}
+.sw-btn{padding:6px 14px;border-radius:7px;border:none;background:transparent;color:#777;font-size:12px;font-family:'Jost',sans-serif;cursor:pointer;transition:all .15s;letter-spacing:.04em;}
+.sw-btn.active{background:#1a1a1a;color:#c9b97a;border:1px solid #c9b97a33;}
+.sw-btn:hover:not(.active){color:#ccc;}
 .top-git{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 13px;border-radius:20px;transition:all .3s;}
 .top-git.online{color:#6a9a6a;background:#0f1a0f;border:1px solid #1d3a1d;}
 .top-git.offline{color:#9a6a6a;background:#1a0f0f;border:1px solid #3a1d1d;}
@@ -98,6 +103,7 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .statmini-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#777;margin-bottom:8px;}
 .statmini-num{font-family:'Cormorant Garamond',serif;font-size:30px;color:#f0ede6;line-height:1;}
 .statmini-num.gold{color:#c9b97a;}
+.statmini-num.red{color:#c97a7a;}
 .statmini-sub{font-size:10.5px;color:#5cba5c;margin-top:5px;}
 .section-h{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#888;margin:24px 0 14px;display:flex;align-items:center;gap:11px;}
 .section-h::after{content:'';flex:1;height:1px;background:#1a1a1a;}
@@ -118,6 +124,9 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .board-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
 .board-desc{font-size:12px;color:#888;line-height:1.6;max-width:60%;}
 .board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.board-wrap{overflow-x:auto;padding-bottom:8px;}
+.board.b8{grid-template-columns:repeat(8,minmax(148px,1fr));min-width:1184px;}
+.board.b8 .col{min-height:360px;}
 .col{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;padding:13px;min-height:420px;transition:background .15s;}
 .col.dragover{background:#13110c;border-color:#c9b97a44;}
 .col-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;}
@@ -128,7 +137,7 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .card-name{font-size:12px;color:#e8e8e3;font-weight:500;margin-bottom:3px;padding-right:34px;}
 .card-branch{font-size:10px;color:#888;margin-bottom:8px;}
 .card-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;}
-.card-loc{font-size:9px;color:#666;}
+.card-loc{font-size:9px;color:#666;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px;}
 .card-demo{font-size:9px;color:#c9b97a;text-decoration:none;border:1px solid #c9b97a33;padding:2px 7px;border-radius:10px;transition:all .15s;}
 .card-demo:hover{background:#c9b97a1a;}
 .card-acts{position:absolute;top:9px;right:9px;display:flex;gap:4px;opacity:0;transition:all .15s;}
@@ -168,7 +177,6 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#c9b97a66;}
 .modal-actions{display:flex;gap:10px;margin-top:20px;}
 .modal-actions .btn{flex:1;justify-content:center;}
-/* DETAIL PANEL */
 .detail-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;justify-content:flex-end;z-index:90;}
 .detail-bg.show{display:flex;}
 .detail{width:420px;max-width:92vw;height:100%;background:#0c0c0c;border-left:1px solid #222;padding:0;overflow-y:auto;animation:slideIn .25s cubic-bezier(.2,.6,.2,1);}
@@ -191,9 +199,10 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 .detail-actions .btn{flex:1;min-width:120px;justify-content:center;}
 .detail-map{display:block;margin-top:18px;text-align:center;background:#13110c;border:1px solid #c9b97a33;border-radius:9px;padding:12px;color:#c9b97a;font-size:13px;text-decoration:none;transition:all .15s;}
 .detail-map:hover{background:#1a1610;}
-.loading{display:flex;align-items:center;justify-content:center;height:200px;color:#666;font-size:13px;gap:10px;}
-.spinner{width:16px;height:16px;border:2px solid #2a2a2a;border-top-color:#c9b97a;border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:9px;font-size:13px;font-family:'Jost',sans-serif;z-index:200;white-space:nowrap;pointer-events:none;animation:toastIn .2s ease;}
+.toast-err{background:#2a1010;color:#c97a7a;border:1px solid #4a2020;}
+.toast-ok{background:#102a10;color:#7ac97a;border:1px solid #205a20;}
+@keyframes toastIn{from{opacity:0;bottom:12px;}to{opacity:1;bottom:24px;}}
 @media(max-width:1000px){.ov-grid{grid-template-columns:1fr;}.statline{grid-template-columns:repeat(2,1fr);}.board{grid-template-columns:repeat(2,1fr);}.crew{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -202,24 +211,31 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
   <div class="side">
     <div class="side-brand"><div class="side-logo">Avèlon</div><div class="side-sub">Zentrale</div></div>
     <div class="side-nav" id="nav">
-      <div class="nav-item active" data-view="home"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Übersicht</div>
-      <div class="nav-item" data-view="akquise"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>Akquise-Board</div>
-      <div class="nav-item" data-view="crew"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>KI-Mitarbeiter</div>
-      <div class="nav-item" data-view="pipeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Kunden-Pipeline</div>
-      <div class="nav-item" data-view="auto"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Automatisierungen</div>
+      <div class="nav-item active" data-view="home"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="nav-label">Übersicht</span></div>
+      <div class="nav-item" data-view="akquise"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><span class="nav-label">Akquise-Board</span></div>
+      <div class="nav-item" data-view="crew"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><span class="nav-label">KI-Mitarbeiter</span></div>
+      <div class="nav-item" data-view="pipeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="nav-label">Kunden-Pipeline</span></div>
+      <div class="nav-item" data-view="auto"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="nav-label">Automatisierungen</span></div>
+      <div class="nav-item" data-view="sperrliste_view"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span class="nav-label">Sperrliste</span></div>
     </div>
     <div class="side-foot"><div class="foot-av">CP</div><div><div class="foot-name">Can Papenheim</div><div class="foot-role">Founder</div></div></div>
   </div>
   <div class="main">
     <div class="topbar">
       <div class="top-title" id="viewTitle">Übersicht</div>
-      <div class="top-git sync" id="status"><span class="git-dot"></span> <span id="statusText">Verbinde…</span></div>
+      <div class="top-right">
+        <div class="switcher">
+          <button class="sw-btn" data-b="website" onclick="switchBereich('website')">Websites</button>
+          <button class="sw-btn" data-b="inserat" onclick="switchBereich('inserat')">3D-Inserate</button>
+        </div>
+        <div class="top-git sync" id="status"><span class="git-dot"></span> <span id="statusText">Verbinde…</span></div>
+      </div>
     </div>
     <div class="content" id="content"></div>
   </div>
 </div>
 
-<!-- ADD/EDIT MODAL -->
+<!-- WEBSITE MODAL -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-h" id="modalTitle">Neuer Lead</div>
@@ -229,7 +245,7 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
     <div class="field"><label>Telefon</label><input id="mPhone" placeholder="z.B. 02381 123456"/></div>
     <div class="field"><label>Kontaktperson</label><input id="mContact" placeholder="z.B. Frau Müller"/></div>
     <div class="field"><label>Demo-Link</label><input id="mDemo" placeholder="https://…netlify.app"/></div>
-    <div class="field"><label>Notizen</label><textarea id="mNotes" rows="3" placeholder="Adresse, Besonderheiten, Recherche-Infos…"></textarea></div>
+    <div class="field"><label>Notizen</label><textarea id="mNotes" rows="3" placeholder="Adresse, Besonderheiten…"></textarea></div>
     <div class="field"><label>Status</label>
       <select id="mStatus">
         <option value="recherchiert">Recherchiert</option>
@@ -246,6 +262,75 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
   </div>
 </div>
 
+<!-- INSERAT MODAL -->
+<div class="modal-bg" id="insModalBg">
+  <div class="modal">
+    <div class="modal-h" id="insModalTitle">Neues Inserat</div>
+    <div class="field"><label>Firma</label><input id="imFirma" placeholder="z.B. Immobilien Schmidt GmbH"/></div>
+    <div class="field"><label>Ansprechpartner</label><input id="imContact" placeholder="z.B. Herr Schmidt"/></div>
+    <div class="field"><label>E-Mail</label><input id="imEmail" type="email" placeholder="kontakt@beispiel.de"/></div>
+    <div class="field"><label>Inserat-Link</label><input id="imInseratUrl" placeholder="https://…"/></div>
+    <div class="field"><label>Portal</label><input id="imPortal" placeholder="z.B. ImmobilienScout24"/></div>
+    <div class="field"><label>Objekt</label><input id="imObjekt" placeholder="z.B. 3-Zimmer-Wohnung Hamm-Mitte"/></div>
+    <div class="field"><label>Notizen</label><textarea id="imNotes" rows="2" placeholder="Besonderheiten…"></textarea></div>
+    <div class="field"><label>Fertigungszeit (Minuten)</label><input id="imMinuten" type="number" min="1" placeholder="z.B. 45"/></div>
+    <div class="field"><label>Status</label>
+      <select id="imStatus">
+        <option value="recherchiert">Recherchiert</option>
+        <option value="mail_entworfen">Mail entworfen</option>
+        <option value="freigegeben">Freigegeben</option>
+        <option value="gesendet">Gesendet</option>
+        <option value="followup">Follow-up</option>
+        <option value="interessiert">Interessiert</option>
+        <option value="kunde">Kunde</option>
+        <option value="abgelehnt">Abgelehnt</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeInsModal()">Abbrechen</button>
+      <button class="btn btn-gold" id="insModalSave" onclick="saveInsLead()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPERRLISTE HINZUFÜGEN -->
+<div class="modal-bg" id="sperrAddModalBg">
+  <div class="modal">
+    <div class="modal-h">Eintrag hinzufügen</div>
+    <div class="field"><label>E-Mail (optional)</label><input id="saEmail" placeholder="name@beispiel.de"/></div>
+    <div class="field"><label>Domain (optional)</label><input id="saDomain" placeholder="beispiel.de"/></div>
+    <div class="field"><label>Grund</label><input id="saGrund" placeholder="z.B. Abgelehnt, Beschwerde"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeSperrAddModal()">Abbrechen</button>
+      <button class="btn btn-gold" onclick="saveSperrEintrag()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPERRLISTE CONFIRM (ABGELEHNT) -->
+<div class="modal-bg" id="sperrModalBg">
+  <div class="modal">
+    <div class="modal-h">Zur Sperrliste?</div>
+    <p style="font-size:13px;color:#999;margin-bottom:14px;line-height:1.5;">Dieser Lead wurde abgelehnt. Adresse blockieren?</p>
+    <div id="sperrEmailDisplay" style="font-size:13px;color:#c9b97a;background:#c9b97a0d;border:1px solid #c9b97a22;border-radius:8px;padding:9px 13px;margin-bottom:14px;"></div>
+    <div class="field">
+      <label style="display:flex;gap:9px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;cursor:pointer;color:#ccc;">
+        <input type="checkbox" id="sperrEmailCb" style="width:auto;accent-color:#c9b97a;cursor:pointer;"/> E-Mail sperren
+      </label>
+    </div>
+    <div class="field">
+      <label style="display:flex;gap:9px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;cursor:pointer;color:#ccc;">
+        <input type="checkbox" id="sperrDomainCb" style="width:auto;accent-color:#c9b97a;cursor:pointer;"/> Domain sperren: <span id="sperrDomainDisplay" style="color:#888;"></span>
+      </label>
+    </div>
+    <div class="field"><label>Grund</label><input id="sperrGrund" value="Abgelehnt"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="confirmSperr(false)">Nein</button>
+      <button class="btn btn-gold" onclick="confirmSperr(true)">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
 <!-- DETAIL PANEL -->
 <div class="detail-bg" id="detailBg">
   <div class="detail" id="detailContent"></div>
@@ -255,203 +340,314 @@ body{background:#060606;font-family:'Jost',sans-serif;color:#e8e8e3;height:100vh
 const SUPABASE_URL='https://eurrqzerazjkasemmigu.supabase.co';
 const SUPABASE_KEY='sb_publishable_8LPC3POTvsuj__9Wu0s_nw_ZP7mrYIe';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let leads=[],todos=[];
-let autos={'auto-deploy':true,'social':true,'mails':false,'tracking':true,'rechnung':false};
-const MONATSZIEL=3000,PAKETWERT=599;
-const COLS=[
+const MONATSZIEL=3000,PAKETWERT=599,TAGESLIMIT_MAILS=10;
+
+const COLS_WEB=[
   {key:'recherchiert',label:'Recherchiert',cls:''},
   {key:'demo',label:'Demo gebaut',cls:'gold'},
   {key:'kontaktiert',label:'Kontaktiert',cls:''},
   {key:'kunde',label:'Kunde',cls:'green'},
   {key:'verloren',label:'Verloren',cls:'red'}
 ];
-const STATUS_LABEL={recherchiert:'Recherchiert',demo:'Demo gebaut',kontaktiert:'Kontaktiert',kunde:'Kunde',verloren:'Verloren'};
-const STATUS_PILL={recherchiert:'pill-grey',demo:'pill-gold',kontaktiert:'pill-blue',kunde:'pill-green',verloren:'pill-red'};
+const COLS_INS=[
+  {key:'recherchiert',label:'Recherchiert',cls:''},
+  {key:'mail_entworfen',label:'Mail entworfen',cls:'gold'},
+  {key:'freigegeben',label:'Freigegeben',cls:'blue'},
+  {key:'gesendet',label:'Gesendet',cls:''},
+  {key:'followup',label:'Follow-up',cls:'gold'},
+  {key:'interessiert',label:'Interessiert',cls:'green'},
+  {key:'kunde',label:'Kunde',cls:'green'},
+  {key:'abgelehnt',label:'Abgelehnt',cls:'red'}
+];
+const SL_WEB={recherchiert:'pill-grey',demo:'pill-gold',kontaktiert:'pill-blue',kunde:'pill-green',verloren:'pill-red'};
+const LL_WEB={recherchiert:'Recherchiert',demo:'Demo gebaut',kontaktiert:'Kontaktiert',kunde:'Kunde',verloren:'Verloren'};
+const SL_INS={recherchiert:'pill-grey',mail_entworfen:'pill-gold',freigegeben:'pill-blue',gesendet:'pill-blue',followup:'pill-gold',interessiert:'pill-green',kunde:'pill-green',abgelehnt:'pill-red'};
+const LL_INS={recherchiert:'Recherchiert',mail_entworfen:'Mail entworfen',freigegeben:'Freigegeben',gesendet:'Gesendet',followup:'Follow-up',interessiert:'Interessiert',kunde:'Kunde',abgelehnt:'Abgelehnt'};
+
+let leads=[],todos=[],sperrliste=[];
+let currentBereich=localStorage.getItem('avln_bereich')||'website';
+let currentView='home';
+let autos={'auto-deploy':true,'social':true,'mails':false,'tracking':true,'rechnung':false};
+let editId=null,_pendingAbgelehnt=null;
+
+// ── UTILS ────────────────────────────────────────────────────
 function setStatus(mode,text){const el=document.getElementById('status');el.className='top-git '+mode;document.getElementById('statusText').textContent=text;}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function greetingText(){const h=new Date().getHours();if(h<11)return'Guten Morgen';if(h<18)return'Guten Tag';return'Guten Abend';}
+function fmt(ts){return ts?new Date(ts).toLocaleDateString('de-DE'):'—';}
+function showToast(msg,type='err'){
+  const el=document.createElement('div');
+  el.className='toast toast-'+type;el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3500);
+}
+function wLeads(){return leads.filter(l=>l.bereich==='website');}
+function iLeads(){return leads.filter(l=>l.bereich==='inserat');}
+function myTodos(){return todos.filter(t=>t.bereich===currentBereich);}
+function isSperrListed(email){
+  if(!email)return null;
+  const em=email.toLowerCase().trim();
+  const dom=em.split('@')[1];
+  return sperrliste.find(s=>(s.email&&s.email.toLowerCase()===em)||(s.domain&&dom&&s.domain.toLowerCase()===dom));
+}
+function countHeuteGesendet(){
+  const today=new Date().toISOString().slice(0,10);
+  return leads.filter(l=>l.bereich==='inserat'&&l.gesendet_am&&l.gesendet_am.slice(0,10)===today).length;
+}
+
+// ── DB ───────────────────────────────────────────────────────
 async function loadAll(){
   setStatus('sync','Lade Daten…');
-  const [l,t]=await Promise.all([
+  const [l,t,sp]=await Promise.all([
     sb.from('leads').select('*').order('created_at',{ascending:true}),
-    sb.from('todos').select('*').order('created_at',{ascending:true})
+    sb.from('todos').select('*').order('created_at',{ascending:true}),
+    sb.from('sperrliste').select('*').order('created_at',{ascending:false})
   ]);
   if(l.error||t.error){setStatus('offline','Offline');console.error(l.error||t.error);return;}
-  leads=l.data||[];todos=t.data||[];
+  leads=l.data||[];todos=t.data||[];sperrliste=sp.data||[];
   setStatus('online','Live verbunden');
 }
-function greetingText(){const h=new Date().getHours();if(h<11)return'Guten Morgen';if(h<18)return'Guten Tag';return'Guten Abend';}
-function nextActions(){
-  const acts=[];
-  leads.filter(l=>l.status==='demo').forEach(l=>acts.push({color:'#c9b97a',name:l.name,hint:'Demo fertig — jetzt Kunde anschreiben',go:'akquise'}));
-  leads.filter(l=>l.status==='recherchiert').slice(0,3).forEach(l=>acts.push({color:'#7aaad0',name:l.name,hint:'Recherchiert — Demo bauen',go:'akquise'}));
-  leads.filter(l=>l.status==='kontaktiert').forEach(l=>acts.push({color:'#7ac97a',name:l.name,hint:'Kontaktiert — nachfassen wenn keine Antwort',go:'akquise'}));
-  return acts.slice(0,5);
+
+// ── TODO HTML ────────────────────────────────────────────────
+function todoListHtml(){
+  const tds=myTodos();
+  return tds.length?tds.map(t=>`
+    <div class="todo ${t.done?'done':''}">
+      <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})">${t.done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>':''}</div>
+      <div class="todo-text">${esc(t.text)}</div>
+      <button class="todo-del" onclick="delTodo(${t.id})">×</button>
+    </div>`).join(''):'<div class="todo-empty">Keine Aufgaben — alles erledigt. ✦</div>';
 }
-const views={
-  home:()=>{
-    const aktiv=leads.filter(l=>l.status==='kunde').length;
-    const akq=leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length;
-    const demos=leads.filter(l=>l.status==='demo').length;
-    const kontaktiert=leads.filter(l=>l.status==='kontaktiert').length;
-    const offen=todos.filter(t=>!t.done).length;
-    const umsatz=aktiv*PAKETWERT;
-    const pct=Math.min(100,Math.round(umsatz/MONATSZIEL*100));
-    const todoItems=todos.length?todos.map(t=>`
-      <div class="todo ${t.done?'done':''}">
-        <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})">${t.done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>':''}</div>
-        <div class="todo-text">${esc(t.text)}</div>
-        <button class="todo-del" onclick="delTodo(${t.id})">×</button>
-      </div>`).join(''):'<div class="todo-empty">Keine Aufgaben — alles erledigt. ✦</div>';
-    const miniCols=COLS.map(c=>{const n=leads.filter(l=>l.status===c.key).length;return `<div class="mini-col" onclick="show('akquise')"><div class="mini-num ${c.cls}">${n}</div><div class="mini-label">${c.label}</div></div>`;}).join('');
-    const acts=nextActions();
-    const actItems=acts.length?acts.map(a=>`
-      <div class="action">
-        <span class="action-dot" style="background:${a.color}"></span>
-        <div class="action-body"><div class="action-name">${esc(a.name)}</div><div class="action-hint">${esc(a.hint)}</div></div>
-        <a class="action-go" onclick="show('${a.go}')">Öffnen</a>
-      </div>`).join(''):'<div class="action-empty">Keine offenen Aktionen. Zeit, neue Leads zu recherchieren.</div>';
-    return `
-    <div class="greeting">
-      <h1>${greetingText()}, Can.</h1>
-      <p>${offen>0?`Du hast ${offen} ${offen===1?'offene Aufgabe':'offene Aufgaben'} und ${acts.length} ${acts.length===1?'nächsten Schritt':'nächste Schritte'} heute.`:'Keine offenen Aufgaben — guter Tag um neue Leads zu gewinnen.'}</p>
+
+// ── HOME WEBSITE ─────────────────────────────────────────────
+function homeWeb(){
+  const wl=wLeads(),tds=myTodos();
+  const aktiv=wl.filter(l=>l.status==='kunde').length;
+  const akq=wl.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length;
+  const demos=wl.filter(l=>l.status==='demo').length;
+  const kontak=wl.filter(l=>l.status==='kontaktiert').length;
+  const offen=tds.filter(t=>!t.done).length;
+  const umsatz=aktiv*PAKETWERT;
+  const pct=Math.min(100,Math.round(umsatz/MONATSZIEL*100));
+  const acts=[];
+  wl.filter(l=>l.status==='demo').forEach(l=>acts.push({color:'#c9b97a',name:l.name,hint:'Demo fertig — jetzt Kunde anschreiben'}));
+  wl.filter(l=>l.status==='recherchiert').slice(0,3).forEach(l=>acts.push({color:'#7aaad0',name:l.name,hint:'Recherchiert — Demo bauen'}));
+  wl.filter(l=>l.status==='kontaktiert').forEach(l=>acts.push({color:'#7ac97a',name:l.name,hint:'Kontaktiert — nachfassen wenn keine Antwort'}));
+  const top5=acts.slice(0,5);
+  const actHtml=top5.length?top5.map(a=>`<div class="action"><span class="action-dot" style="background:${a.color}"></span><div class="action-body"><div class="action-name">${esc(a.name)}</div><div class="action-hint">${esc(a.hint)}</div></div><a class="action-go" onclick="show('akquise')">Öffnen</a></div>`).join(''):'<div class="action-empty">Keine offenen Aktionen. Zeit, neue Leads zu recherchieren.</div>';
+  const miniCols=COLS_WEB.map(c=>`<div class="mini-col" onclick="show('akquise')"><div class="mini-num ${c.cls}">${wl.filter(l=>l.status===c.key).length}</div><div class="mini-label">${c.label}</div></div>`).join('');
+  return `<div class="greeting"><h1>${greetingText()}, Can.</h1><p>${offen>0?`Du hast ${offen} ${offen===1?'offene Aufgabe':'offene Aufgaben'} und ${top5.length} ${top5.length===1?'nächsten Schritt':'nächste Schritte'} heute.`:'Keine offenen Aufgaben — guter Tag um neue Leads zu gewinnen.'}</p></div>
+  <div class="statline">
+    <div class="statmini"><div class="statmini-label">Aktive Kunden</div><div class="statmini-num">${aktiv}</div><div class="statmini-sub">&nbsp;</div></div>
+    <div class="statmini"><div class="statmini-label">Akquise-Leads</div><div class="statmini-num gold">${akq}</div><div class="statmini-sub">${demos} ${demos===1?'Demo':'Demos'} bereit</div></div>
+    <div class="statmini"><div class="statmini-label">Wartet auf Antwort</div><div class="statmini-num">${kontak}</div><div class="statmini-sub">&nbsp;</div></div>
+    <div class="statmini"><div class="statmini-label">Umsatz Monat</div><div class="statmini-num gold">€${umsatz.toLocaleString('de-DE')}</div><div class="statmini-sub">${pct}% vom Ziel</div></div>
+  </div>
+  <div class="ov-grid">
+    <div class="ov-col">
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">✓</span> Heute zu erledigen</h3><span class="ch-count">${offen} offen</span></div>
+        <div class="todo-add"><input id="todoInput" placeholder="Neue Aufgabe…" onkeydown="if(event.key==='Enter')addTodo()"/><button onclick="addTodo()">+</button></div>
+        <div class="todo-list">${todoListHtml()}</div>
+      </div>
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">▦</span> Akquise-Schnellblick</h3><a class="action-go" onclick="show('akquise')">Board öffnen</a></div><div class="mini-board">${miniCols}</div></div>
     </div>
-    <div class="statline">
-      <div class="statmini"><div class="statmini-label">Aktive Kunden</div><div class="statmini-num">${aktiv}</div><div class="statmini-sub">&nbsp;</div></div>
-      <div class="statmini"><div class="statmini-label">Akquise-Leads</div><div class="statmini-num gold">${akq}</div><div class="statmini-sub">${demos} ${demos===1?'Demo':'Demos'} bereit</div></div>
-      <div class="statmini"><div class="statmini-label">Wartet auf Antwort</div><div class="statmini-num">${kontaktiert}</div><div class="statmini-sub">&nbsp;</div></div>
-      <div class="statmini"><div class="statmini-label">Umsatz Monat</div><div class="statmini-num gold">€${umsatz.toLocaleString('de-DE')}</div><div class="statmini-sub">${pct}% vom Ziel</div></div>
-    </div>
-    <div class="ov-grid">
-      <div class="ov-col">
-        <div class="card-box">
-          <div class="ch"><h3><span class="ch-ico">✓</span> Heute zu erledigen</h3><span class="ch-count">${offen} offen</span></div>
-          <div class="todo-add">
-            <input id="todoInput" placeholder="Neue Aufgabe…" onkeydown="if(event.key==='Enter')addTodo()"/>
-            <button onclick="addTodo()">+</button>
-          </div>
-          <div class="todo-list">${todoItems}</div>
-        </div>
-        <div class="card-box">
-          <div class="ch"><h3><span class="ch-ico">▦</span> Akquise-Schnellblick</h3><a class="action-go" onclick="show('akquise')">Board öffnen</a></div>
-          <div class="mini-board">${miniCols}</div>
+    <div class="ov-col">
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">→</span> Nächste Aktion</h3><span class="ch-count">${top5.length}</span></div>${actHtml}</div>
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">€</span> Umsatz & Ziel</h3><span class="ch-count">${new Date().toLocaleDateString('de-DE',{month:'long'})}</span></div>
+        <div class="goal-top"><div class="goal-now">€${umsatz.toLocaleString('de-DE')}</div><div class="goal-target">Ziel: €${MONATSZIEL.toLocaleString('de-DE')}</div></div>
+        <div class="goal-bar"><div class="goal-fill" style="width:${pct}%"></div></div>
+        <div class="goal-meta"><span>${pct}% erreicht</span><span>noch €${Math.max(0,MONATSZIEL-umsatz).toLocaleString('de-DE')}</span></div>
+        <div class="umsatz-rows">
+          <div class="urow"><span class="urow-label">Aktive Kunden</span><span class="urow-val" style="color:#c9b97a;">${aktiv} × €${PAKETWERT}</span></div>
+          <div class="urow"><span class="urow-label">In Pipeline (Potenzial)</span><span class="urow-val" style="color:#7aaad0;">€${(akq*PAKETWERT).toLocaleString('de-DE')}</span></div>
         </div>
       </div>
-      <div class="ov-col">
-        <div class="card-box">
-          <div class="ch"><h3><span class="ch-ico">→</span> Nächste Aktion</h3><span class="ch-count">${acts.length}</span></div>
-          ${actItems}
-        </div>
-        <div class="card-box">
-          <div class="ch"><h3><span class="ch-ico">€</span> Umsatz & Ziel</h3><span class="ch-count">${new Date().toLocaleDateString('de-DE',{month:'long'})}</span></div>
-          <div class="goal-top">
-            <div class="goal-now">€${umsatz.toLocaleString('de-DE')}</div>
-            <div class="goal-target">Ziel: €${MONATSZIEL.toLocaleString('de-DE')}</div>
-          </div>
-          <div class="goal-bar"><div class="goal-fill" style="width:${pct}%"></div></div>
-          <div class="goal-meta"><span>${pct}% erreicht</span><span>noch €${Math.max(0,MONATSZIEL-umsatz).toLocaleString('de-DE')}</span></div>
-          <div class="umsatz-rows">
-            <div class="urow"><span class="urow-label">Aktive Kunden</span><span class="urow-val" style="color:#c9b97a;">${aktiv} × €${PAKETWERT}</span></div>
-            <div class="urow"><span class="urow-label">In Pipeline (Potenzial)</span><span class="urow-val" style="color:#7aaad0;">€${(akq*PAKETWERT).toLocaleString('de-DE')}</span></div>
-          </div>
-        </div>
+    </div>
+  </div>`;
+}
+
+// ── HOME INSERAT ─────────────────────────────────────────────
+function homeIns(){
+  const il=iLeads(),tds=myTodos();
+  const offen=tds.filter(t=>!t.done).length;
+  const heuteSent=countHeuteGesendet();
+  const lim=heuteSent>=TAGESLIMIT_MAILS;
+  const recherchiert=il.filter(l=>l.status==='recherchiert').length;
+  const offeneFollowup=il.filter(l=>l.status==='gesendet'&&!l.followup_am).length;
+  const interessiert=il.filter(l=>l.status==='interessiert').length;
+  const kunden=il.filter(l=>l.status==='kunde').length;
+  const miniCols=[
+    {num:recherchiert,label:'Recherchiert',cls:''},
+    {num:`${heuteSent}/${TAGESLIMIT_MAILS}`,label:'Heute gesendet',cls:lim?'red':''},
+    {num:offeneFollowup,label:'Offen Follow-up',cls:'gold'},
+    {num:interessiert,label:'Interessiert',cls:'green'},
+    {num:kunden,label:'Kunden',cls:'green'}
+  ].map(c=>`<div class="mini-col" onclick="show('inserate')"><div class="mini-num ${c.cls}">${c.num}</div><div class="mini-label">${c.label}</div></div>`).join('');
+  return `<div class="greeting"><h1>${greetingText()}, Can.</h1><p>3D-Inserate · ${offen>0?`${offen} offene Aufgaben.`:'Keine offenen Aufgaben.'}${lim?' — Tageslimit ('+TAGESLIMIT_MAILS+') heute erreicht.':''}</p></div>
+  <div class="statline">
+    <div class="statmini"><div class="statmini-label">Recherchiert</div><div class="statmini-num">${recherchiert}</div><div class="statmini-sub">&nbsp;</div></div>
+    <div class="statmini"><div class="statmini-label">Heute gesendet</div><div class="statmini-num ${lim?'red':'gold'}">${heuteSent}/${TAGESLIMIT_MAILS}</div><div class="statmini-sub" style="${lim?'color:#c97a7a':''}">${lim?'Limit erreicht':'verfügbar: '+(TAGESLIMIT_MAILS-heuteSent)}</div></div>
+    <div class="statmini"><div class="statmini-label">Interessiert</div><div class="statmini-num">${interessiert}</div><div class="statmini-sub">&nbsp;</div></div>
+    <div class="statmini"><div class="statmini-label">Kunden</div><div class="statmini-num gold">${kunden}</div><div class="statmini-sub">&nbsp;</div></div>
+  </div>
+  <div class="ov-grid">
+    <div class="ov-col">
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">✓</span> Heute zu erledigen</h3><span class="ch-count">${offen} offen</span></div>
+        <div class="todo-add"><input id="todoInput" placeholder="Neue Aufgabe…" onkeydown="if(event.key==='Enter')addTodo()"/><button onclick="addTodo()">+</button></div>
+        <div class="todo-list">${todoListHtml()}</div>
       </div>
-    </div>`;
-  },
-  akquise:()=>{
-    let cols=COLS.map(col=>{
-      const items=leads.filter(l=>l.status===col.key);
-      const cards=items.map(l=>`
-        <div class="card" draggable="true" data-id="${l.id}" onclick="openDetail(${l.id})">
-          <div class="card-acts">
-            <button class="card-act" onclick="editLead(${l.id},event)">✎</button>
-            <button class="card-act del" onclick="delLead(${l.id},event)">×</button>
-          </div>
-          <div class="card-name">${esc(l.name)}</div>
-          <div class="card-branch">${esc(l.branch||'—')}</div>
-          <div class="card-foot">
-            <span class="card-loc">${esc(l.loc||'Hamm')}</span>
-            ${l.demo_url?`<a class="card-demo" href="${esc(l.demo_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Demo →</a>`:col.key==='kunde'?'<span class="pill pill-green">Kunde</span>':col.key==='verloren'?'<span class="pill pill-red">Verloren</span>':col.key==='kontaktiert'?'<span class="pill pill-blue">Mail raus</span>':''}
-          </div>
-        </div>`).join('');
-      return `<div class="col" data-col="${col.key}">
-        <div class="col-h">${col.label} <span class="col-count">${items.length}</span></div>
-        ${cards}
-        <button class="add-card" onclick="openModal('${col.key}')">+ Hinzufügen</button>
+    </div>
+    <div class="ov-col">
+      <div class="card-box"><div class="ch"><h3><span class="ch-ico">▦</span> Inserate-Schnellblick</h3><a class="action-go" onclick="show('inserate')">Board öffnen</a></div>
+        <div class="mini-board" style="grid-template-columns:repeat(5,1fr)">${miniCols}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── BOARD WEBSITE ────────────────────────────────────────────
+function boardWeb(){
+  const wl=wLeads();
+  const cols=COLS_WEB.map(col=>{
+    const items=wl.filter(l=>l.status===col.key);
+    const cards=items.map(l=>`
+      <div class="card" draggable="true" data-id="${l.id}" onclick="openDetail(${l.id})">
+        <div class="card-acts"><button class="card-act" onclick="editLead(${l.id},event)">✎</button><button class="card-act del" onclick="delLead(${l.id},event)">×</button></div>
+        <div class="card-name">${esc(l.name)}</div>
+        <div class="card-branch">${esc(l.branch||'—')}</div>
+        <div class="card-foot">
+          <span class="card-loc">${esc(l.loc||'Hamm')}</span>
+          ${l.demo_url?`<a class="card-demo" href="${esc(l.demo_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Demo →</a>`:col.key==='kunde'?'<span class="pill pill-green">Kunde</span>':col.key==='verloren'?'<span class="pill pill-red">Verloren</span>':col.key==='kontaktiert'?'<span class="pill pill-blue">Mail raus</span>':''}
+        </div>
+      </div>`).join('');
+    return `<div class="col" data-col="${col.key}"><div class="col-h">${col.label} <span class="col-count">${items.length}</span></div>${cards}<button class="add-card" onclick="openModal('${col.key}')">+ Hinzufügen</button></div>`;
+  }).join('');
+  return `<div class="board-head"><div class="board-desc">Unternehmen in Hamm ohne Website. Karte anklicken für Details, per Drag & Drop verschieben. Alles wird live gespeichert.</div><button class="btn btn-gold" onclick="openModal('recherchiert')">+ Neuer Lead</button></div><div class="board" id="board">${cols}</div>`;
+}
+
+// ── BOARD INSERAT ────────────────────────────────────────────
+function boardIns(){
+  const il=iLeads();
+  const heuteSent=countHeuteGesendet();
+  const lim=heuteSent>=TAGESLIMIT_MAILS;
+  const cols=COLS_INS.map(col=>{
+    const items=il.filter(l=>l.status===col.key);
+    const cards=items.map(l=>{
+      const sp=l.email?isSperrListed(l.email):null;
+      const badge=sp?'<span class="pill pill-red" style="font-size:8px">Gesperrt</span>':l.freigegeben_am?'<span class="pill pill-green" style="font-size:8px">✓ Freigegeben</span>':'';
+      return `<div class="card" draggable="true" data-id="${l.id}" data-b="inserat" onclick="openDetail(${l.id})">
+        <div class="card-acts"><button class="card-act" onclick="editInsLead(${l.id},event)">✎</button><button class="card-act del" onclick="delLead(${l.id},event)">×</button></div>
+        <div class="card-name">${esc(l.firma||l.name)}</div>
+        <div class="card-branch">${esc(l.portal||'—')}${l.objekt?' · '+esc(l.objekt):''}</div>
+        <div class="card-foot">${badge}<span class="card-loc">${esc(l.email||'')}</span></div>
       </div>`;
     }).join('');
-    return `
-    <div class="board-head">
-      <div class="board-desc">Unternehmen in Hamm ohne Website. Karte anklicken für alle Details, per Drag & Drop verschieben. Alles wird live gespeichert.</div>
-      <button class="btn btn-gold" onclick="openModal('recherchiert')">+ Neuer Lead</button>
-    </div>
-    <div class="board" id="board">${cols}</div>`;
-  },
-  crew:()=>`
-    <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Deine Crew — jeder mit eigenem System Prompt und GitHub-Skill.</p>
-    <div class="crew">
-      ${[
-        ['K','Kim','Design-Direktorin','#c9b97a','design-system','Layouts, Farbpaletten, Typografie. Kennt das komplette AvèlonStudios Design-System.'],
-        ['L','Lukas','Web Developer','#7a9bc9','frontend-design','HTML, CSS, JS. Baut & reviewed Code, optimiert Performance für Netlify.'],
-        ['S','Sara','Marketing','#c97ab0','content-creator','Instagram, TikTok, Captions. Schreibt im AvèlonStudios-Ton für lokale Zielgruppen.'],
-        ['T','Tom','Account Manager','#7ac9a0','docx','Angebote, Übergabe-Mails, Verträge. Kennt alle Preise und Konditionen.'],
-        ['F','Felix','SEO & Akquise','#c9a07a','web-research','Findet Hammer Unternehmen ohne Website, recherchiert Kontakte, baut Lead-Listen.']
-      ].map(e=>`
-        <div class="emp">
-          <div class="emp-top"><div class="emp-av" style="background:${e[3]}22;color:${e[3]};">${e[0]}</div><div><div class="emp-name">${e[1]}</div><div class="emp-role">${e[2]}</div></div></div>
-          <div class="emp-skill">⬡ Skill: ${e[4]}</div>
-          <div class="emp-desc">${e[5]}</div>
-          <div class="emp-status">● Bereit</div>
-        </div>`).join('')}
-      <div class="emp" style="border-style:dashed;opacity:.6;">
-        <div class="emp-top"><div class="emp-av" style="background:#33333322;color:#888;">+</div><div><div class="emp-name">Neuer Mitarbeiter</div><div class="emp-role">Rolle definieren</div></div></div>
-        <div class="emp-desc" style="margin-top:13px;">Erstelle einen neuen KI-Mitarbeiter mit eigenem Skill und System Prompt.</div>
-      </div>
-    </div>`,
-  pipeline:()=>{
-    const kunden=leads.filter(l=>l.status==='kunde');
-    const rows=kunden.length?kunden.map(k=>`<div class="li"><div><div class="li-name">${esc(k.name)}</div><div class="li-meta">${esc(k.branch||'')}</div></div><span class="pill pill-gold">Aktiv</span></div>`).join(''):'<div class="li"><span class="li-meta">Noch keine aktiven Kunden — gewinne deinen ersten über das Akquise-Board.</span></div>';
-    return `
-    <div class="row2">
-      <div class="panel"><div class="panel-h">Aktive Projekte</div>${rows}</div>
-      <div class="panel">
-        <div class="panel-h">Umsatz-Übersicht</div>
-        <div class="li"><span class="li-name">Abgeschlossen (Monat)</span><span class="li-meta" style="color:#c9b97a;">€${(kunden.length*PAKETWERT).toLocaleString('de-DE')}</span></div>
-        <div class="li"><span class="li-name">In Pipeline</span><span class="li-meta" style="color:#7aaad0;">€${(leads.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length*PAKETWERT).toLocaleString('de-DE')}</span></div>
-        <div class="li"><span class="li-name">Monatsziel</span><span class="li-meta" style="color:#888;">€${MONATSZIEL.toLocaleString('de-DE')}</span></div>
-      </div>
-    </div>`;
-  },
-  auto:()=>`
-    <p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Laufende Prozesse die automatisch im Hintergrund arbeiten — über GitHub Actions & Make.com.</p>
-    <div class="auto-list">
-      ${[
-        ['auto-deploy','🚀','Auto-Deploy','GitHub Push → Netlify Live'],
-        ['social','📸','Social Media Posting','Notion geplant → Instagram & TikTok'],
-        ['mails','✉️','Akquise-Mails','Demo fertig → Mail an Unternehmen'],
-        ['tracking','📋','Projekt-Tracking','Neuer Kunde → Notion-Seite + Repo-Ordner'],
-        ['rechnung','🧾','Rechnungs-Generator','Projekt fertig → PDF-Rechnung']
-      ].map(a=>`
-        <div class="auto"><div class="auto-ico">${a[1]}</div><div class="auto-info"><div class="auto-name">${a[2]}</div><div class="auto-flow">${a[3]}</div></div><div class="toggle ${autos[a[0]]?'':'off'}" onclick="toggleAuto('${a[0]}',this)"></div></div>
-      `).join('')}
-    </div>`
-};
-const nav=document.getElementById('nav');
-const content=document.getElementById('content');
-const viewTitle=document.getElementById('viewTitle');
-const titles={home:'Übersicht',akquise:'Akquise-Board',crew:'KI-Mitarbeiter',pipeline:'Kunden-Pipeline',auto:'Automatisierungen'};
-let currentView='home';
-function show(view){
-  currentView=view;
-  content.innerHTML=views[view]();
-  viewTitle.textContent=titles[view];
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
-  if(view==='akquise')initDragDrop();
+    return `<div class="col" data-col="${col.key}" data-b="inserat"><div class="col-h">${col.label} <span class="col-count">${items.length}</span></div>${cards}<button class="add-card" onclick="openInsModal('${col.key}')">+ Hinzufügen</button></div>`;
+  }).join('');
+  return `<div class="board-head"><div class="board-desc">3D-Rundgang-Leads · Heute gesendet: <strong style="color:${lim?'#c97a7a':'#c9b97a'}">${heuteSent}/${TAGESLIMIT_MAILS}</strong>. Drag & Drop zwischen Spalten.</div><button class="btn btn-gold" onclick="openInsModal('recherchiert')">+ Neues Inserat</button></div><div class="board-wrap"><div class="board b8" id="board">${cols}</div></div>`;
 }
-nav.addEventListener('click',e=>{const item=e.target.closest('.nav-item');if(item)show(item.dataset.view);});
+
+// ── OTHER VIEWS ──────────────────────────────────────────────
+function viewCrew(){
+  return `<p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Deine Crew — jeder mit eigenem System Prompt und GitHub-Skill.</p>
+  <div class="crew">${[
+    ['K','Kim','Design-Direktorin','#c9b97a','design-system','Layouts, Farbpaletten, Typografie. Kennt das komplette AvèlonStudios Design-System.'],
+    ['L','Lukas','Web Developer','#7a9bc9','frontend-design','HTML, CSS, JS. Baut & reviewed Code, optimiert Performance für Netlify.'],
+    ['S','Sara','Marketing','#c97ab0','content-creator','Instagram, TikTok, Captions. Schreibt im AvèlonStudios-Ton für lokale Zielgruppen.'],
+    ['T','Tom','Account Manager','#7ac9a0','docx','Angebote, Übergabe-Mails, Verträge. Kennt alle Preise und Konditionen.'],
+    ['F','Felix','SEO & Akquise','#c9a07a','web-research','Findet Hammer Unternehmen ohne Website, recherchiert Kontakte, baut Lead-Listen.']
+  ].map(e=>`<div class="emp"><div class="emp-top"><div class="emp-av" style="background:${e[3]}22;color:${e[3]};">${e[0]}</div><div><div class="emp-name">${e[1]}</div><div class="emp-role">${e[2]}</div></div></div><div class="emp-skill">⬡ Skill: ${e[4]}</div><div class="emp-desc">${e[5]}</div><div class="emp-status">● Bereit</div></div>`).join('')}
+  <div class="emp" style="border-style:dashed;opacity:.6;"><div class="emp-top"><div class="emp-av" style="background:#33333322;color:#888;">+</div><div><div class="emp-name">Neuer Mitarbeiter</div><div class="emp-role">Rolle definieren</div></div></div><div class="emp-desc" style="margin-top:13px;">Erstelle einen neuen KI-Mitarbeiter mit eigenem Skill und System Prompt.</div></div>
+  </div>`;
+}
+
+function viewPipeline(){
+  const kunden=leads.filter(l=>l.bereich===currentBereich&&l.status==='kunde');
+  const rows=kunden.length?kunden.map(k=>`<div class="li"><div><div class="li-name">${esc(k.firma||k.name)}</div><div class="li-meta">${esc(k.branch||k.portal||'')}</div></div><span class="pill pill-gold">Aktiv</span></div>`).join(''):'<div class="li"><span class="li-meta">Keine aktiven Kunden.</span></div>';
+  if(currentBereich==='inserat'){
+    return `<div class="row2"><div class="panel"><div class="panel-h">Aktive Kunden — 3D-Inserate</div>${rows}</div></div>`;
+  }
+  const wl=wLeads();
+  const kWeb=wl.filter(l=>l.status==='kunde');
+  return `<div class="row2">
+    <div class="panel"><div class="panel-h">Aktive Projekte</div>${rows}</div>
+    <div class="panel"><div class="panel-h">Umsatz-Übersicht</div>
+      <div class="li"><span class="li-name">Abgeschlossen (Monat)</span><span class="li-meta" style="color:#c9b97a;">€${(kWeb.length*PAKETWERT).toLocaleString('de-DE')}</span></div>
+      <div class="li"><span class="li-name">In Pipeline</span><span class="li-meta" style="color:#7aaad0;">€${(wl.filter(l=>['recherchiert','demo','kontaktiert'].includes(l.status)).length*PAKETWERT).toLocaleString('de-DE')}</span></div>
+      <div class="li"><span class="li-name">Monatsziel</span><span class="li-meta" style="color:#888;">€${MONATSZIEL.toLocaleString('de-DE')}</span></div>
+    </div>
+  </div>`;
+}
+
+function viewAuto(){
+  return `<p style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">Laufende Prozesse die automatisch im Hintergrund arbeiten — über GitHub Actions & Make.com.</p>
+  <div class="auto-list">${[
+    ['auto-deploy','🚀','Auto-Deploy','GitHub Push → Netlify Live'],
+    ['social','📸','Social Media Posting','Notion geplant → Instagram & TikTok'],
+    ['mails','✉️','Akquise-Mails','Demo fertig → Mail an Unternehmen'],
+    ['tracking','📋','Projekt-Tracking','Neuer Kunde → Notion-Seite + Repo-Ordner'],
+    ['rechnung','🧾','Rechnungs-Generator','Projekt fertig → PDF-Rechnung']
+  ].map(a=>`<div class="auto"><div class="auto-ico">${a[1]}</div><div class="auto-info"><div class="auto-name">${a[2]}</div><div class="auto-flow">${a[3]}</div></div><div class="toggle ${autos[a[0]]?'':'off'}" onclick="toggleAuto('${a[0]}',this)"></div></div>`).join('')}</div>`;
+}
+
+function viewSperrliste(){
+  const rows=sperrliste.length?sperrliste.map(s=>`
+    <div class="li">
+      <div>
+        <div class="li-name">${esc(s.email||'')}${s.email&&s.domain?' / ':''}${s.domain?'@'+esc(s.domain):''}</div>
+        <div class="li-meta">${esc(s.grund||'—')} · ${fmt(s.created_at)}</div>
+      </div>
+      <button class="btn" onclick="delSperrEintrag(${s.id})" style="color:#c97a7a;border-color:#3a1a1a;flex-shrink:0;">Löschen</button>
+    </div>`).join(''):'<div class="li"><span class="li-meta">Sperrliste ist leer.</span></div>';
+  return `<div class="board-head"><div class="board-desc">Gesperrte E-Mail-Adressen und Domains — werden vor jeder Freigabe automatisch geprüft.</div><button class="btn btn-gold" onclick="openSperrAddModal()">+ Eintrag hinzufügen</button></div><div class="panel" style="max-width:720px;">${rows}</div>`;
+}
+
+// ── VIEWS / NAV ──────────────────────────────────────────────
+const views={
+  home:()=>currentBereich==='inserat'?homeIns():homeWeb(),
+  akquise:boardWeb,
+  inserate:boardIns,
+  crew:viewCrew,
+  pipeline:viewPipeline,
+  auto:viewAuto,
+  sperrliste_view:viewSperrliste
+};
+const titles={home:'Übersicht',akquise:'Akquise-Board',inserate:'Inserate-Board',crew:'KI-Mitarbeiter',pipeline:'Kunden-Pipeline',auto:'Automatisierungen',sperrliste_view:'Sperrliste'};
+
+const navEl=document.getElementById('nav');
+const contentEl=document.getElementById('content');
+const viewTitleEl=document.getElementById('viewTitle');
+
+function show(v){
+  const resolved=(v==='akquise'&&currentBereich==='inserat')?'inserate':(v==='inserate'&&currentBereich==='website')?'akquise':v;
+  currentView=resolved;
+  contentEl.innerHTML=(views[resolved]||views.home)();
+  viewTitleEl.textContent=titles[resolved]||'';
+  navEl.querySelectorAll('.nav-item').forEach(n=>{
+    const isBoard=(resolved==='akquise'||resolved==='inserate')&&n.dataset.view==='akquise';
+    n.classList.toggle('active',n.dataset.view===resolved||isBoard);
+  });
+  if(resolved==='akquise')initDragDropWeb();
+  if(resolved==='inserate')initDragDropIns();
+}
+
+function switchBereich(b){
+  currentBereich=b;
+  localStorage.setItem('avln_bereich',b);
+  document.querySelectorAll('.sw-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.b===b));
+  const boardLabel=navEl.querySelector('[data-view="akquise"] .nav-label');
+  if(boardLabel)boardLabel.textContent=b==='inserat'?'Inserate-Board':'Akquise-Board';
+  const v=(currentView==='inserate'||currentView==='akquise')?'akquise':currentView;
+  show(v);
+}
+
+navEl.addEventListener('click',e=>{const item=e.target.closest('.nav-item');if(item)show(item.dataset.view);});
+
+// ── TODOS ────────────────────────────────────────────────────
 async function addTodo(){
   const inp=document.getElementById('todoInput');const text=inp.value.trim();if(!text)return;
   inp.value='';setStatus('sync','Speichere…');
-  const {data,error}=await sb.from('todos').insert({text,done:false}).select();
+  const {data,error}=await sb.from('todos').insert({text,done:false,bereich:currentBereich}).select();
   if(error){setStatus('offline','Fehler');return;}
   todos.push(data[0]);setStatus('online','Live verbunden');show('home');
   setTimeout(()=>document.getElementById('todoInput')?.focus(),50);
@@ -467,73 +663,9 @@ async function delTodo(id){
   const {error}=await sb.from('todos').delete().eq('id',id);
   setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
 }
-function initDragDrop(){
-  let dragged=null;
-  document.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('dragstart',e=>{dragged=card;card.classList.add('dragging');});
-    card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;});
-  });
-  document.querySelectorAll('.col').forEach(col=>{
-    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('dragover');});
-    col.addEventListener('dragleave',()=>col.classList.remove('dragover'));
-    col.addEventListener('drop',async e=>{
-      e.preventDefault();col.classList.remove('dragover');
-      if(!dragged)return;
-      const id=+dragged.dataset.id;const newStatus=col.dataset.col;
-      const lead=leads.find(l=>l.id===id);
-      if(lead&&lead.status!==newStatus){
-        lead.status=newStatus;show('akquise');setStatus('sync','Speichere…');
-        const {error}=await sb.from('leads').update({status:newStatus}).eq('id',id);
-        setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
-      }
-    });
-  });
-}
-// DETAIL PANEL
-function openDetail(id){
-  const l=leads.find(x=>x.id===id);if(!l)return;
-  const mapsQuery=encodeURIComponent((l.name||'')+' '+(l.notes||'').split('.')[0]+' '+(l.loc||'Hamm'));
-  const c=document.getElementById('detailContent');
-  c.innerHTML=`
-    <div class="detail-head">
-      <button class="detail-close" onclick="closeDetail()">×</button>
-      <span class="detail-status pill ${STATUS_PILL[l.status]}">${STATUS_LABEL[l.status]||l.status}</span>
-      <div class="detail-name">${esc(l.name)}</div>
-      <div class="detail-branch">${esc(l.branch||'—')}</div>
-    </div>
-    <div class="detail-body">
-      <div class="dfield">
-        <div class="dfield-label">📍 Standort</div>
-        <div class="dfield-val ${l.loc?'':'empty'}">${esc(l.loc||'Nicht angegeben')}</div>
-      </div>
-      <div class="dfield">
-        <div class="dfield-label">📞 Telefon</div>
-        <div class="dfield-val ${l.phone?'':'empty'}">${l.phone?`<a href="tel:${esc(l.phone).replace(/\s/g,'')}">${esc(l.phone)}</a>`:'Noch zu recherchieren'}</div>
-      </div>
-      <div class="dfield">
-        <div class="dfield-label">👤 Kontaktperson</div>
-        <div class="dfield-val ${l.contact_person?'':'empty'}">${esc(l.contact_person||'Unbekannt')}</div>
-      </div>
-      <div class="dfield">
-        <div class="dfield-label">🌐 Demo / Website</div>
-        <div class="dfield-val ${l.demo_url?'':'empty'}">${l.demo_url?`<a href="${esc(l.demo_url)}" target="_blank" rel="noopener">${esc(l.demo_url)}</a>`:'Noch keine Demo gebaut'}</div>
-      </div>
-      <div class="dfield">
-        <div class="dfield-label">📝 Notizen & Recherche</div>
-        <div class="detail-notes">${esc(l.notes||'Keine Notizen hinterlegt.')}</div>
-      </div>
-      <a class="detail-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺 Auf Google Maps suchen</a>
-      <div class="detail-actions">
-        <button class="btn" onclick="editLead(${l.id},event)">✎ Bearbeiten</button>
-        ${l.phone?`<a class="btn btn-gold" href="tel:${esc(l.phone).replace(/\s/g,'')}">📞 Anrufen</a>`:''}
-      </div>
-    </div>`;
-  document.getElementById('detailBg').classList.add('show');
-}
-function closeDetail(){document.getElementById('detailBg').classList.remove('show');}
-document.getElementById('detailBg').addEventListener('click',e=>{if(e.target.id==='detailBg')closeDetail();});
-// MODAL
-let modalStatus='recherchiert',editId=null;
+
+// ── WEBSITE LEADS ────────────────────────────────────────────
+let modalStatus='recherchiert';
 function openModal(status){
   editId=null;modalStatus=status||'recherchiert';
   document.getElementById('modalTitle').textContent='Neuer Lead';
@@ -545,8 +677,8 @@ function openModal(status){
 }
 function editLead(id,e){
   if(e)e.stopPropagation();
-  const l=leads.find(x=>x.id===id);if(!l)return;editId=id;
-  closeDetail();
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  editId=id;closeDetail();
   document.getElementById('modalTitle').textContent='Lead bearbeiten';
   document.getElementById('modalSave').textContent='Aktualisieren';
   document.getElementById('mName').value=l.name||'';
@@ -565,7 +697,7 @@ async function saveLead(){
   const name=document.getElementById('mName').value.trim();
   if(!name){document.getElementById('mName').focus();return;}
   const payload={
-    name,
+    name,bereich:'website',
     branch:document.getElementById('mBranch').value.trim()||null,
     loc:document.getElementById('mLoc').value.trim()||'Hamm',
     phone:document.getElementById('mPhone').value.trim()||null,
@@ -587,13 +719,291 @@ async function saveLead(){
   setStatus('online','Live verbunden');show('akquise');
 }
 async function delLead(id,e){
-  if(e)e.stopPropagation();leads=leads.filter(l=>l.id!==id);show('akquise');setStatus('sync','Lösche…');
+  if(e)e.stopPropagation();
+  leads=leads.filter(l=>l.id!==id);show(currentView);setStatus('sync','Lösche…');
   const {error}=await sb.from('leads').delete().eq('id',id);
   setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
 }
+
+// ── INSERAT LEADS ────────────────────────────────────────────
+function openInsModal(status){
+  editId=null;
+  document.getElementById('insModalTitle').textContent='Neues Inserat';
+  document.getElementById('insModalSave').textContent='Speichern';
+  ['imFirma','imContact','imEmail','imInseratUrl','imPortal','imObjekt','imNotes','imMinuten'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('imStatus').value=status||'recherchiert';
+  document.getElementById('insModalBg').classList.add('show');
+  setTimeout(()=>document.getElementById('imFirma').focus(),50);
+}
+function editInsLead(id,e){
+  if(e)e.stopPropagation();
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  editId=id;closeDetail();
+  document.getElementById('insModalTitle').textContent='Inserat bearbeiten';
+  document.getElementById('insModalSave').textContent='Aktualisieren';
+  document.getElementById('imFirma').value=l.firma||'';
+  document.getElementById('imContact').value=l.contact_person||'';
+  document.getElementById('imEmail').value=l.email||'';
+  document.getElementById('imInseratUrl').value=l.inserat_url||'';
+  document.getElementById('imPortal').value=l.portal||'';
+  document.getElementById('imObjekt').value=l.objekt||'';
+  document.getElementById('imNotes').value=l.notes||'';
+  document.getElementById('imMinuten').value=l.minuten_fertigung||'';
+  document.getElementById('imStatus').value=l.status||'recherchiert';
+  document.getElementById('insModalBg').classList.add('show');
+  setTimeout(()=>document.getElementById('imFirma').focus(),50);
+}
+function closeInsModal(){document.getElementById('insModalBg').classList.remove('show');}
+async function saveInsLead(){
+  const firma=document.getElementById('imFirma').value.trim();
+  if(!firma){document.getElementById('imFirma').focus();return;}
+  const payload={
+    bereich:'inserat',name:firma,firma,
+    contact_person:document.getElementById('imContact').value.trim()||null,
+    email:document.getElementById('imEmail').value.trim()||null,
+    inserat_url:document.getElementById('imInseratUrl').value.trim()||null,
+    portal:document.getElementById('imPortal').value.trim()||null,
+    objekt:document.getElementById('imObjekt').value.trim()||null,
+    notes:document.getElementById('imNotes').value.trim()||null,
+    minuten_fertigung:parseInt(document.getElementById('imMinuten').value)||null,
+    status:document.getElementById('imStatus').value
+  };
+  closeInsModal();setStatus('sync','Speichere…');
+  if(editId){
+    const {error}=await sb.from('leads').update(payload).eq('id',editId);
+    if(error){setStatus('offline','Fehler');return;}
+    const idx=leads.findIndex(l=>l.id===editId);if(idx>-1)leads[idx]={...leads[idx],...payload};
+  }else{
+    const {data,error}=await sb.from('leads').insert(payload).select();
+    if(error){setStatus('offline','Fehler');return;}
+    leads.push(data[0]);
+  }
+  setStatus('online','Live verbunden');show('inserate');
+}
+
+// ── DRAG & DROP WEBSITE ──────────────────────────────────────
+function initDragDropWeb(){
+  let dragged=null;
+  document.querySelectorAll('.card:not([data-b])').forEach(card=>{
+    card.addEventListener('dragstart',e=>{dragged=card;card.classList.add('dragging');});
+    card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;});
+  });
+  document.querySelectorAll('.col:not([data-b])').forEach(col=>{
+    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('dragover');});
+    col.addEventListener('dragleave',()=>col.classList.remove('dragover'));
+    col.addEventListener('drop',async e=>{
+      e.preventDefault();col.classList.remove('dragover');
+      if(!dragged)return;
+      const id=+dragged.dataset.id;const newStatus=col.dataset.col;
+      const lead=leads.find(l=>l.id===id);
+      if(lead&&lead.status!==newStatus){
+        lead.status=newStatus;show('akquise');setStatus('sync','Speichere…');
+        const {error}=await sb.from('leads').update({status:newStatus}).eq('id',id);
+        setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+      }
+    });
+  });
+}
+
+// ── DRAG & DROP INSERAT ──────────────────────────────────────
+function initDragDropIns(){
+  let dragged=null;
+  document.querySelectorAll('.card[data-b="inserat"]').forEach(card=>{
+    card.addEventListener('dragstart',e=>{dragged=card;card.classList.add('dragging');});
+    card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;});
+  });
+  document.querySelectorAll('.col[data-b="inserat"]').forEach(col=>{
+    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('dragover');});
+    col.addEventListener('dragleave',()=>col.classList.remove('dragover'));
+    col.addEventListener('drop',async e=>{
+      e.preventDefault();col.classList.remove('dragover');
+      if(!dragged)return;
+      const id=+dragged.dataset.id;const newStatus=col.dataset.col;
+      const lead=leads.find(l=>l.id===id);
+      if(!lead||lead.status===newStatus)return;
+
+      const updates={status:newStatus};
+
+      if(newStatus==='freigegeben'){
+        if(!lead.email){showToast('E-Mail fehlt — Freigabe nicht möglich');return;}
+        const sp=isSperrListed(lead.email);
+        if(sp){showToast('Gesperrt: '+(sp.grund||'Auf Sperrliste'));return;}
+        updates.freigegeben_am=new Date().toISOString();
+      }
+      if(newStatus==='gesendet'){
+        if(!lead.freigegeben_am){showToast('Zuerst freigeben (Detailpanel → Freigeben)');return;}
+        if(countHeuteGesendet()>=TAGESLIMIT_MAILS){showToast('Tageslimit ('+TAGESLIMIT_MAILS+'/Tag) erreicht');return;}
+        updates.gesendet_am=new Date().toISOString();
+      }
+      if(newStatus==='followup'){
+        if(lead.followup_am){showToast('Bereits ein Follow-up erfolgt');return;}
+        updates.followup_am=new Date().toISOString();
+      }
+
+      Object.assign(lead,updates);
+      show('inserate');
+      setStatus('sync','Speichere…');
+      const {error}=await sb.from('leads').update(updates).eq('id',id);
+      setStatus(error?'offline':'online',error?'Fehler':'Live verbunden');
+      if(newStatus==='abgelehnt'&&lead.email)handleAbgelehnt(lead);
+    });
+  });
+}
+
+// ── DETAIL WEBSITE ───────────────────────────────────────────
+function openDetail(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  if(l.bereich==='inserat'){openDetailIns(l);return;}
+  const mapsQuery=encodeURIComponent((l.name||'')+' '+(l.notes||'').split('.')[0]+' '+(l.loc||'Hamm'));
+  document.getElementById('detailContent').innerHTML=`
+    <div class="detail-head">
+      <button class="detail-close" onclick="closeDetail()">×</button>
+      <span class="detail-status pill ${SL_WEB[l.status]||'pill-grey'}">${LL_WEB[l.status]||l.status}</span>
+      <div class="detail-name">${esc(l.name)}</div>
+      <div class="detail-branch">${esc(l.branch||'—')}</div>
+    </div>
+    <div class="detail-body">
+      <div class="dfield"><div class="dfield-label">📍 Standort</div><div class="dfield-val ${l.loc?'':'empty'}">${esc(l.loc||'Nicht angegeben')}</div></div>
+      <div class="dfield"><div class="dfield-label">📞 Telefon</div><div class="dfield-val ${l.phone?'':'empty'}">${l.phone?`<a href="tel:${esc(l.phone).replace(/\s/g,'')}">${esc(l.phone)}</a>`:'Noch zu recherchieren'}</div></div>
+      <div class="dfield"><div class="dfield-label">👤 Kontaktperson</div><div class="dfield-val ${l.contact_person?'':'empty'}">${esc(l.contact_person||'Unbekannt')}</div></div>
+      <div class="dfield"><div class="dfield-label">🌐 Demo / Website</div><div class="dfield-val ${l.demo_url?'':'empty'}">${l.demo_url?`<a href="${esc(l.demo_url)}" target="_blank" rel="noopener">${esc(l.demo_url)}</a>`:'Noch keine Demo gebaut'}</div></div>
+      <div class="dfield"><div class="dfield-label">📝 Notizen & Recherche</div><div class="detail-notes">${esc(l.notes||'Keine Notizen hinterlegt.')}</div></div>
+      <a class="detail-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺 Auf Google Maps suchen</a>
+      <div class="detail-actions">
+        <button class="btn" onclick="editLead(${l.id},event)">✎ Bearbeiten</button>
+        ${l.phone?`<a class="btn btn-gold" href="tel:${esc(l.phone).replace(/\s/g,'')}">📞 Anrufen</a>`:''}
+      </div>
+    </div>`;
+  document.getElementById('detailBg').classList.add('show');
+}
+
+// ── DETAIL INSERAT ───────────────────────────────────────────
+function openDetailIns(l){
+  const sp=l.email?isSperrListed(l.email):null;
+  document.getElementById('detailContent').innerHTML=`
+    <div class="detail-head">
+      <button class="detail-close" onclick="closeDetail()">×</button>
+      <span class="detail-status pill ${SL_INS[l.status]||'pill-grey'}">${LL_INS[l.status]||l.status}</span>
+      <div class="detail-name">${esc(l.firma||l.name)}</div>
+      <div class="detail-branch">${esc(l.portal||'—')}${l.objekt?' · '+esc(l.objekt):''}</div>
+    </div>
+    <div class="detail-body">
+      <div class="dfield"><div class="dfield-label">👤 Ansprechpartner</div><div class="dfield-val ${l.contact_person?'':'empty'}">${esc(l.contact_person||'Nicht angegeben')}</div></div>
+      <div class="dfield"><div class="dfield-label">✉ E-Mail</div>
+        <div class="dfield-val ${l.email?'':'empty'}" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          ${l.email?`<a href="mailto:${esc(l.email)}">${esc(l.email)}</a>`:'Keine E-Mail hinterlegt'}
+          ${sp?`<span class="pill pill-red" style="font-size:9px;">Gesperrt: ${esc(sp.grund||'Sperrliste')}</span>`:''}
+        </div>
+      </div>
+      <div class="dfield"><div class="dfield-label">🔗 Inserat-Link</div><div class="dfield-val ${l.inserat_url?'':'empty'}">${l.inserat_url?`<a href="${esc(l.inserat_url)}" target="_blank" rel="noopener">${esc(l.inserat_url)}</a>`:'Kein Link hinterlegt'}</div></div>
+      <div class="dfield"><div class="dfield-label">🏢 Portal</div><div class="dfield-val ${l.portal?'':'empty'}">${esc(l.portal||'—')}</div></div>
+      <div class="dfield"><div class="dfield-label">🏠 Objekt</div><div class="dfield-val ${l.objekt?'':'empty'}">${esc(l.objekt||'—')}</div></div>
+      ${l.minuten_fertigung?`<div class="dfield"><div class="dfield-label">⏱ Fertigungszeit</div><div class="dfield-val">${l.minuten_fertigung} Minuten</div></div>`:''}
+      <div class="dfield"><div class="dfield-label">📋 Freigabe</div>
+        <div class="dfield-val" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <span>${l.freigegeben_am?'✓ '+fmt(l.freigegeben_am):'—'}</span>
+          ${!l.freigegeben_am&&!sp?`<button class="btn btn-gold" onclick="freigeben(${l.id})">Freigeben</button>`:''}
+          ${sp?'<span style="font-size:12px;color:#c97a7a;">Gesperrt — Freigabe blockiert</span>':''}
+        </div>
+      </div>
+      <div class="dfield"><div class="dfield-label">📮 Gesendet am</div><div class="dfield-val">${fmt(l.gesendet_am)}</div></div>
+      ${l.followup_am?`<div class="dfield"><div class="dfield-label">🔄 Follow-up am</div><div class="dfield-val">${fmt(l.followup_am)}</div></div>`:''}
+      ${l.notes?`<div class="dfield"><div class="dfield-label">📝 Notizen</div><div class="detail-notes">${esc(l.notes)}</div></div>`:''}
+      <div class="detail-actions">
+        <button class="btn" onclick="editInsLead(${l.id},event)">✎ Bearbeiten</button>
+        ${l.email?`<a class="btn btn-gold" href="mailto:${esc(l.email)}">✉ Mail öffnen</a>`:''}
+      </div>
+    </div>`;
+  document.getElementById('detailBg').classList.add('show');
+}
+
+function closeDetail(){document.getElementById('detailBg').classList.remove('show');}
+
+// ── FREIGABE ─────────────────────────────────────────────────
+async function freigeben(id){
+  const lead=leads.find(l=>l.id===id);if(!lead)return;
+  if(!lead.email){showToast('Keine E-Mail-Adresse — Freigabe nicht möglich');return;}
+  const sp=isSperrListed(lead.email);
+  if(sp){showToast('Gesperrt: '+(sp.grund||'Auf Sperrliste'));return;}
+  const freigegeben_am=new Date().toISOString();
+  setStatus('sync','Speichere…');
+  const {error}=await sb.from('leads').update({freigegeben_am,status:'freigegeben'}).eq('id',id);
+  if(error){setStatus('offline','Fehler');return;}
+  lead.freigegeben_am=freigegeben_am;lead.status='freigegeben';
+  setStatus('online','Live verbunden');
+  showToast('Freigabe erteilt','ok');
+  closeDetail();show('inserate');
+}
+
+// ── SPERRLISTE CONFIRM ────────────────────────────────────────
+function handleAbgelehnt(lead){
+  _pendingAbgelehnt=lead;
+  document.getElementById('sperrEmailDisplay').textContent=lead.email;
+  document.getElementById('sperrDomainDisplay').textContent=lead.email.split('@')[1]||'';
+  document.getElementById('sperrEmailCb').checked=true;
+  document.getElementById('sperrDomainCb').checked=false;
+  document.getElementById('sperrGrund').value='Abgelehnt';
+  document.getElementById('sperrModalBg').classList.add('show');
+}
+async function confirmSperr(confirmed){
+  document.getElementById('sperrModalBg').classList.remove('show');
+  if(!confirmed||!_pendingAbgelehnt){_pendingAbgelehnt=null;return;}
+  const lead=_pendingAbgelehnt;
+  const addEmail=document.getElementById('sperrEmailCb').checked;
+  const addDomain=document.getElementById('sperrDomainCb').checked;
+  const grund=document.getElementById('sperrGrund').value.trim()||'Abgelehnt';
+  _pendingAbgelehnt=null;
+  if(!addEmail&&!addDomain)return;
+  const inserts=[];
+  if(addEmail)inserts.push({email:lead.email.toLowerCase(),grund});
+  if(addDomain){const dom=lead.email.split('@')[1];if(dom)inserts.push({domain:dom.toLowerCase(),grund});}
+  for(const entry of inserts){
+    const {data,error}=await sb.from('sperrliste').insert(entry).select();
+    if(!error&&data)sperrliste.unshift(data[0]);
+  }
+  showToast('Zur Sperrliste hinzugefügt','ok');
+}
+
+// ── SPERRLISTE CRUD ───────────────────────────────────────────
+function openSperrAddModal(){
+  ['saEmail','saDomain','saGrund'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sperrAddModalBg').classList.add('show');
+  setTimeout(()=>document.getElementById('saEmail').focus(),50);
+}
+function closeSperrAddModal(){document.getElementById('sperrAddModalBg').classList.remove('show');}
+async function saveSperrEintrag(){
+  const email=document.getElementById('saEmail').value.trim().toLowerCase()||null;
+  const domain=document.getElementById('saDomain').value.trim().toLowerCase()||null;
+  const grund=document.getElementById('saGrund').value.trim()||null;
+  if(!email&&!domain){showToast('E-Mail oder Domain angeben');return;}
+  closeSperrAddModal();setStatus('sync','Speichere…');
+  const {data,error}=await sb.from('sperrliste').insert({email,domain,grund}).select();
+  if(error){setStatus('offline','Fehler');return;}
+  sperrliste.unshift(data[0]);
+  setStatus('online','Live verbunden');show('sperrliste_view');
+}
+async function delSperrEintrag(id){
+  if(!confirm('Eintrag aus der Sperrliste löschen?'))return;
+  sperrliste=sperrliste.filter(s=>s.id!==id);show('sperrliste_view');
+  const {error}=await sb.from('sperrliste').delete().eq('id',id);
+  if(error)showToast('Fehler beim Löschen');
+}
+
+// ── MISC ──────────────────────────────────────────────────────
 function toggleAuto(key,el){autos[key]=!autos[key];el.classList.toggle('off');}
+
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
-(async()=>{await loadAll();show('home');})();
+document.getElementById('insModalBg').addEventListener('click',e=>{if(e.target.id==='insModalBg')closeInsModal();});
+document.getElementById('detailBg').addEventListener('click',e=>{if(e.target.id==='detailBg')closeDetail();});
+document.getElementById('sperrAddModalBg').addEventListener('click',e=>{if(e.target.id==='sperrAddModalBg')closeSperrAddModal();});
+
+(async()=>{
+  await loadAll();
+  document.querySelectorAll('.sw-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.b===currentBereich));
+  const boardLabel=navEl.querySelector('[data-view="akquise"] .nav-label');
+  if(boardLabel)boardLabel.textContent=currentBereich==='inserat'?'Inserate-Board':'Akquise-Board';
+  show('home');
+})();
 </script>
 </body>
 </html>
