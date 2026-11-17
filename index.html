@@ -523,7 +523,7 @@ async function sendLoginLink(){
   if(!email){document.getElementById('loginEmail').focus();return;}
   const btn=document.getElementById('loginBtn');
   btn.disabled=true;btn.textContent='Sende…';
-  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:'https://avelon-zentralbasis.netlify.app'}});
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:'https://avelon-zentralbasis.netlify.app',shouldCreateUser:false}});
   if(error){
     btn.disabled=false;btn.textContent='Link senden';
     document.getElementById('loginError').textContent=error.message;
